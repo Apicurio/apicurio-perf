@@ -1,6 +1,11 @@
 # References
 Openshift Cluster Manager:  https://qaprodauth.cloud.redhat.com/openshift/
 
+# Pre-requisites
+* jq
+* ocm
+* oc
+
 # How to install
 To install the in-memory cluster, run the `install.sh` script:
 
