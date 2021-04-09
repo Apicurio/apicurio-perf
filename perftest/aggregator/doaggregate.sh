@@ -7,7 +7,13 @@ echo "--------- 1"
 echo "--------- 1"
 
 echo "--------- 2"
-cat /usr/local/apache2/conf/httpd.conf
+cat /etc/httpd/conf/httpd.conf
 echo "--------- 2"
+
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
 
 exec /usr/sbin/apachectl -DFOREGROUND -e debug
