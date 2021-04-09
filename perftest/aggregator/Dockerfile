@@ -13,8 +13,8 @@ RUN yum update -y && \
 
 EXPOSE 80
 
-ADD /doaggregate.sh doaggregate.sh
-ADD /var/www/html webroot
+ADD doaggregate.sh /doaggregate.sh
+ADD html /var/www/html
 RUN chmod -v +x /doaggregate.sh
 
 ENTRYPOINT [ "/doaggregate.sh" ]
