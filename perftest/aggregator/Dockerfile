@@ -11,5 +11,7 @@ RUN yum update -y && \
 
 EXPOSE 80
 
-#ENTRYPOINT [ "/usr/sbin/httpd", "–D", "FOREGROUND" ]
-ENTRYPOINT [ "/usr/sbin/apachectl", "-DFOREGROUND" ]
+ADD /doaggregate.sh doaggregate.sh
+RUN chmod -v +x /doaggregate.sh
+
+ENTRYPOINT [ "/doaggregate.sh" ]
