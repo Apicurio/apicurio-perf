@@ -6,13 +6,7 @@
 
 FROM centos:7
 
-RUN yum -y update httpd && \
-    useradd --create-home --home-dir /home/webuser --shell /bin/bash --gid root webuser
-
-RUN echo 'webpass123#' | chpasswd
-
-USER newuser
-WORKDIR /home/webuser
+RUN yum -y update httpd
 
 EXPOSE 8080
 
