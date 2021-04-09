@@ -7,7 +7,7 @@
 FROM centos:7
 
 RUN yum -y update httpd && \
-    useradd --create-home --home-dir /home/webuser --shell /bin/bash --gid root --groups sudo webuser
+    useradd --create-home --home-dir /home/webuser --shell /bin/bash --gid root webuser
 
 RUN echo 'webpass123#' | chpasswd
 
