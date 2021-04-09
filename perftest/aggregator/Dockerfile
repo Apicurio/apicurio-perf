@@ -8,6 +8,7 @@ FROM centos:8
 
 RUN yum update -y && \
     yum install -y httpd && \
+    yum install -y rsync-daemon && \
     mkdir -p /webroot && \
     mkdir -p /var/www/html
 

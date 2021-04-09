@@ -22,7 +22,7 @@ ENV TEST_AGGREGATOR_HOST none
 RUN mkdir -p gatling
 
 # install gatling
-RUN apk add --update wget bash libc6-compat curl && \
+RUN apk add --update wget bash libc6-compat curl rsync && \
   mkdir -p /tmp/downloads && \
   wget -q -O /tmp/downloads/gatling-$GATLING_VERSION.zip \
      https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/$GATLING_VERSION/gatling-charts-highcharts-bundle-$GATLING_VERSION-bundle.zip && \
