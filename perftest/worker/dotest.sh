@@ -31,9 +31,8 @@ if [ "x$TEST_REPORT_RESULTS" = "xtrue" ]
 then
   echo "Uploading simulation log..."
   UUID=`cat /proc/sys/kernel/random/uuid`
-  mv /opt/gatling/reports/simulation.log /opt/gatling/reports/simulation-$UUID.log
+  mv /opt/gatling/results/basicsimulation-*/simulation.log /opt/gatling/reports/simulation-$UUID.log
 fi
 
-find /opt/gatling -name 'simulation.log'
 
 echo "Done!"

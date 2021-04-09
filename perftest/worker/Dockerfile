@@ -1,5 +1,5 @@
-# Build: docker build -t="apicurio/apicurio-perftest-load" --rm .
-# Run:   docker run -it apicurio/apicurio-perftest-load --env REGISTRY_URL=http://127.0.0.1:8080/apis/registry/v1 --network="host"
+# Build: docker build -t="apicurio/apicurio-perftest-worker" --rm .
+# Run:   docker run -it apicurio/apicurio-perftest-worker --env REGISTRY_URL=http://127.0.0.1:8080/apis/registry/v1 --network="host"
 
 FROM openjdk:8-jdk-alpine
 
