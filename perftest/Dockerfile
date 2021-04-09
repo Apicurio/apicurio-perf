@@ -12,11 +12,11 @@ ENV GATLING_VERSION 3.5.1
 # set environment variables
 ENV PATH /opt/gatling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV GATLING_HOME /opt/gatling
-ENV REGISTRY_URL=http://127.0.0.1:8080/apis/registry/v1
-ENV TEST_USERS=10
-ENV TEST_RAMP_TIME=30
-ENV TEST_REPORT_RESULTS=false
-ENV TEST_AGGREGATOR_HOST=
+ENV REGISTRY_URL http://127.0.0.1:8080/apis/registry/v1
+ENV TEST_USERS 10
+ENV TEST_RAMP_TIME 30
+ENV TEST_REPORT_RESULTS false
+ENV TEST_AGGREGATOR_HOST none
 
 # create directory for gatling install
 RUN mkdir -p gatling
