@@ -1,3 +1,6 @@
+# Build: docker build -t="apicurio/apicurio-perftest-load" --rm .
+# Run:   docker run -it apicurio/apicurio-perftest-load --env REGISTRY_URL=http://127.0.0.1:8080/apis/registry/v1 --network="host"
+
 FROM openjdk:8-jdk-alpine
 
 # working directory for gatling
@@ -29,7 +32,7 @@ ADD run.sh /opt/gatling/run.sh
 # set environment variables
 ENV PATH /opt/gatling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV GATLING_HOME /opt/gatling
-ENV REGISTRY_URL=
+ENV REGISTRY_URL=http://127.0.0.1:8080/apis/registry/v1
 ENV TEST_USERS=10
 ENV TEST_RAMP_TIME=30
 ENV TEST_REPORT_RESULTS=false
