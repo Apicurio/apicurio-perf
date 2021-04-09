@@ -10,6 +10,6 @@ RUN yum -y update httpd
 
 EXPOSE 8080
 
-RUN sudo systemctl start httpd
+RUN systemctl start httpd
 
 ENTRYPOINT [ "/usr/sbin/httpd", "–DFOREGROUND" ]
