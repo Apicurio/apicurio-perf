@@ -20,13 +20,14 @@ echo "TEST_REPORT_RESULTS: $TEST_REPORT_RESULTS"
 echo "TEST_AGGREGATOR_HOST: $TEST_AGGREGATOR_HOST"
 echo "-------------------------------------------------------------------------"
 
+curl $REGISTRY_URL/search/artifacts --fail
 
 cd /opt/gatling
 ./bin/gatling.sh -nr -sf /opt/gatling-simulations -s simulations.BasicSimulation
 
 echo "Test complete"
 
-if [ "x$TEST_REPORT_RESULTS" = "xtrue"]
+if [ "x$TEST_REPORT_RESULTS" = "xtrue" ]
 then
   echo "Uploading simulation log..."
   UUID=`cat /proc/sys/kernel/random/uuid`
