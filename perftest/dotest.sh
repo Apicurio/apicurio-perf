@@ -34,4 +34,6 @@ then
   mv /opt/gatling/reports/simulation.log /opt/gatling/reports/simulation-$UUID.log
 fi
 
+find /opt/gatling -name 'simulation.log'
+
 echo "Done!"
