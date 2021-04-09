@@ -11,4 +11,4 @@ RUN yum update -y && \
 
 EXPOSE 80
 
-ENTRYPOINT [ "/usr/sbin/httpd", "–DFOREGROUND", "-k", "start" ]
+ENTRYPOINT [ "/usr/sbin/httpd", "–D", "FOREGROUND" ]
