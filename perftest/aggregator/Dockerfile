@@ -9,6 +9,6 @@ FROM centos:7
 RUN yum update -y && \
     yum install -y httpd
 
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT [ "/usr/local/apache/bin/httpd", "–DFOREGROUND" ]
