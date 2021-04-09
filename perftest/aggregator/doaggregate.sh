@@ -3,7 +3,7 @@
 rm -rf /run/httpd/* /tmp/httpd*
 
 echo "---------------------"
-/usr/sbin/apachectl --help
+/usr/sbin/httpd --help
 echo "---------------------"
 
-exec /usr/sbin/apachectl -DFOREGROUND
+echo "exec /usr/sbin/apachectl -DFOREGROUND"
