@@ -11,4 +11,5 @@ RUN yum update -y && \
 
 EXPOSE 80
 
-ENTRYPOINT [ "/usr/sbin/httpd", "–D", "FOREGROUND" ]
+#ENTRYPOINT [ "/usr/sbin/httpd", "–D", "FOREGROUND" ]
+ENTRYPOINT [ "/usr/sbin/apachectl", "-DFOREGROUND" ]
