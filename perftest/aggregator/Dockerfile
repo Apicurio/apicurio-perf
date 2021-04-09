@@ -8,7 +8,8 @@ FROM centos:8
 
 RUN yum update -y && \
     yum install -y httpd && \
-    mkdir -p /webroot
+    mkdir -p /webroot && \
+    mkdir -p /var/www/html
 
 EXPOSE 80
 
