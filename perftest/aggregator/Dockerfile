@@ -11,6 +11,4 @@ RUN yum update -y && \
 
 EXPOSE 80
 
-CMD [ "find", "/", "-name", "httpd" ]
-
-ENTRYPOINT [ "/usr/sbin/httpd", "–DFOREGROUND" ]
+ENTRYPOINT [ "/usr/sbin/httpd", "–DFOREGROUND", "-k", "start" ]
