@@ -26,8 +26,8 @@ RUN apk add --update wget bash libc6-compat && \
 WORKDIR  /opt/gatling
 
 # add simulations to the docker image
-ADD ../scala /opt/gatling-simulations
-ADD run.sh /opt/gatling/run.sh
+ADD scala /opt/gatling-simulations
+ADD dotest.sh /opt/gatling/dotest.sh
 
 # set environment variables
 ENV PATH /opt/gatling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -40,4 +40,4 @@ ENV TEST_AGGREGATOR_HOST=
 
 # run the test
 #ENTRYPOINT ["/opt/gatling/bin/gatling.sh", "-sf", "/opt/gatling-simulations", "-s", "simulations.BasicSimulation"]
-ENTRYPOINT ["/opt/gatling/run.sh"]
+ENTRYPOINT ["/opt/gatling/dotest.sh"]
