@@ -4,7 +4,7 @@
 #    firewall-cmd --permanent --add-service=http && \
 #    firewall-cmd --reload && \
 
-FROM centos:7
+FROM centos:8
 
 RUN yum update -y && \
     yum install -y httpd
