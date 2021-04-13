@@ -23,6 +23,8 @@ echo "Starting FTP server"
 
 #exec /usr/sbin/apachectl -DFOREGROUND -e debug
 
+echo "Started FTP server!" >> /var/log/xferlog
+
 echo "Tailing the ftp log!"
 tail -f /var/log/xferlog
 

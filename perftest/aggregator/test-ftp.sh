@@ -1,6 +1,7 @@
 #!/bin/bash
 
-ftp -n localhost 5021 <<EOF
+ftp -n <<EOF
+connect localhost 5021
 user anonymous anonymous
 put simulation.log
 EOF
