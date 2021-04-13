@@ -2,6 +2,9 @@
 
 rm -rf /run/httpd/* /tmp/httpd*
 
+mkdir -p /tmp/logs
+mkdir -p /srv/ftp/
+
 echo "-------------- cat /etc/vsftpd/vsftpd.conf"
 cat /etc/vsftpd/vsftpd.conf
 echo "--------------"
@@ -12,8 +15,7 @@ java -version
 echo "--------------"
 
 echo "Starting FTP server"
-vsftpd --help
-vsftpd --version
+/usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf &
 
 #echo "Starting httpd"
 #/usr/sbin/apachectl -DFOREGROUND &
@@ -22,18 +24,18 @@ vsftpd --version
 
 echo ""
 echo "Watching for simulation log files... (Ctrl-C to stop the aggregator)"
-WATCH_DIR=/tmp/logs
+WATCH_DIR=/srv/ftp/
 LOGFILE=/tmp/watchlog.txt
 #while : ; do
-    ls -al /tmp/logs
+    ls -al /srv/ftp/
     inotifywait $WATCH_DIR -t 5
     sleep 5
 
-    ls -al /tmp/logs
+    ls -al /srv/ftp/
     inotifywait $WATCH_DIR -t 5
     sleep 5
 
-    ls -al /tmp/logs
+    ls -al /srv/ftp/
     inotifywait $WATCH_DIR -t 5
     sleep 5
 
