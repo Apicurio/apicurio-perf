@@ -6,6 +6,10 @@ echo "-------------- java -version"
 java -version
 echo "--------------"
 
+echo "Configuring upload directory"
+mkdir -p /home/simuser/logs
+chown simuer /home/simuser/logs
+
 echo "Configuring sshd"
 
 if [ ! -f "/etc/ssh/ssh_host_rsa_key" ]; then
@@ -41,7 +45,7 @@ echo "Starting httpd"
 
 echo ""
 echo "Watching for simulation log files... (Ctrl-C to stop the aggregator)"
-WATCH_DIR=/home/simuser/
+WATCH_DIR=/home/simuser/logs
 LOGFILE=/tmp/watchlog.txt
 #while : ; do
 
