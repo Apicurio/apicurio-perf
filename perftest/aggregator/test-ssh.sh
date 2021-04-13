@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ssh -p 5022 -i id_rsa simuser@localhost
+ssh -o "StrictHostKeyChecking no"  -p 5022 simuser@localhost
