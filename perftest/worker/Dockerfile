@@ -1,6 +1,3 @@
-# Build: docker build -t="apicurio/apicurio-perftest-worker" --rm .
-# Run:   docker run -it apicurio/apicurio-perftest-worker --env REGISTRY_URL=http://127.0.0.1:8080/apis/registry/v1 --network="host"
-
 FROM openjdk:8-jdk-alpine
 
 # working directory for gatling
