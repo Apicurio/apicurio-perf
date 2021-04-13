@@ -36,7 +36,7 @@ echo "------------------------"
 echo ""
 
 echo "Starting httpd"
-exec /usr/sbin/apachectl start
+/usr/sbin/apachectl -DFOREGROUND &
 
 #exec /usr/sbin/apachectl -DFOREGROUND -e debug
 

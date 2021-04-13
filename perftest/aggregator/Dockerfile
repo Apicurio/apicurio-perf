@@ -4,7 +4,7 @@ RUN yum update -y && \
     yum install -y httpd && \
     yum install -y rsync-daemon && \
     yum install -y java-11-openjdk-devel && \
-    yum install -y gcc make && \
+    yum install -y gcc make unzip && \
     mkdir -p /var/www/html
 
 EXPOSE 80
