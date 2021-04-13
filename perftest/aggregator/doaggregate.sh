@@ -18,15 +18,15 @@ echo "-------------- java -version"
 java -version
 echo "--------------"
 
-echo "Building and installed inotify-tools"
-mkdir -p /tmp/work
-cd /tmp/work
-curl https://codeload.github.com/inotify-tools/inotify-tools/zip/refs/tags/3.20.11.0 -o /tmp/work/inotify-tools-3.20.11.0.zip
-unzip inotify-tools-3.20.11.0.zip
-cd /tmp/work/inotify-tools-3.20.11.0
-./configure
-make
-make install
+#echo "Building and installed inotify-tools"
+#mkdir -p /tmp/work
+#cd /tmp/work
+#curl https://codeload.github.com/inotify-tools/inotify-tools/zip/refs/tags/3.20.11.0 -o /tmp/work/inotify-tools-3.20.11.0.zip
+#unzip inotify-tools-3.20.11.0.zip
+#cd /tmp/work/inotify-tools-3.20.11.0
+#./configure
+#make
+#make install
 
 echo ""
 echo ""
