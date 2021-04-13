@@ -14,7 +14,7 @@ EXPOSE 873
 
 ADD doaggregate.sh /doaggregate.sh
 ADD html /var/www/html
-ADD conf/rsyncd.conf /tmp/rsyncd.conf
+ADD conf/vsftpd.conf /tmp/vsftpd.conf
 RUN chmod -v +x /doaggregate.sh
 
 ENTRYPOINT [ "/doaggregate.sh" ]

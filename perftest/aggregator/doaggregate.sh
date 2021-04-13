@@ -6,6 +6,7 @@ mkdir -p /tmp/logs
 mkdir -p /srv/ftp/
 
 echo "-------------- cat /etc/vsftpd/vsftpd.conf"
+cp /tmp/vsftpd.conf /etc/vsftpd/vsftpd.conf
 cat /etc/vsftpd/vsftpd.conf
 echo "--------------"
 echo ""
