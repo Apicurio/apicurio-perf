@@ -23,10 +23,10 @@ echo "Starting FTP server"
 
 #exec /usr/sbin/apachectl -DFOREGROUND -e debug
 
-echo "Started FTP server!" >> /var/log/xferlog
+echo "Started FTP server!" >> /var/log/vsftpd.log
 
 echo "Tailing the ftp log!"
-tail -f /var/log/xferlog
+tail -f /var/log/vsftpd.log
 
 echo ""
 echo "Watching for simulation log files... (Ctrl-C to stop the aggregator)"
