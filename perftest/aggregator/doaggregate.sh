@@ -45,9 +45,9 @@ WATCH_DIR=/home/simuser/
 LOGFILE=/tmp/watchlog.txt
 #while : ; do
 
-    ls -al /srv/ftp/
+    ls -al $WATCH_DIR
     inotifywait $WATCH_DIR -t 60
-    sleep 5
+    ls -al $WATCH_DIR
 
 #        inotifywait $watchdir | while read path action file; do
 #                ts=$(date +"%C%y%m%d%H%M%S")
