@@ -31,26 +31,23 @@ if [ ! -d "/var/run/sshd" ]; then
 fi
 
 echo "Starting SSH server"
-/usr/sbin/sshd -D
+/usr/sbin/sshd -D &
 
-#echo "Starting httpd"
-#/usr/sbin/apachectl -DFOREGROUND &
+echo "Starting httpd"
+/usr/sbin/apachectl -DFOREGROUND &
 
 #exec /usr/sbin/apachectl -DFOREGROUND -e debug
-
-echo "Ctrl-C to stop..." >> /tmp/msg.log
-tail -f /tmp/msg.log
 
 
 echo ""
 echo "Watching for simulation log files... (Ctrl-C to stop the aggregator)"
-#WATCH_DIR=/srv/ftp/
-#LOGFILE=/tmp/watchlog.txt
+WATCH_DIR=/home/simuser/
+LOGFILE=/tmp/watchlog.txt
 #while : ; do
 
-#    ls -al /srv/ftp/
-#    inotifywait $WATCH_DIR -t 5
-#    sleep 5
+    ls -al /srv/ftp/
+    inotifywait $WATCH_DIR -t 60
+    sleep 5
 
 #        inotifywait $watchdir | while read path action file; do
 #                ts=$(date +"%C%y%m%d%H%M%S")
@@ -59,3 +56,6 @@ echo "Watching for simulation log files... (Ctrl-C to stop the aggregator)"
 #        done
 #done
 echo "Done!"
+
+echo "Ctrl-C to stop..." >> /tmp/msg.log
+tail -f /tmp/msg.log
