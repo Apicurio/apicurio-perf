@@ -7,7 +7,8 @@ java -version
 echo "--------------"
 
 echo "Starting SSH server"
-sshd &
+whereis sshd
+/usr/sbin/sshd &
 
 #echo "Starting httpd"
 #/usr/sbin/apachectl -DFOREGROUND &
