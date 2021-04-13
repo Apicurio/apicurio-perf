@@ -9,6 +9,8 @@ RUN yum install -y epel-release && \
     yum install -y gcc make unzip && \
     mkdir -p /var/www/html
 
+RUN rm -rf /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_dsa_key
+
 RUN useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 simpass)" simuser
 
 EXPOSE 80
