@@ -8,7 +8,7 @@ echo "--------------"
 
 echo "Configuring upload directory"
 mkdir -p /home/simuser/logs
-chown simuer /home/simuser/logs
+chown simuser /home/simuser/logs
 
 echo "Configuring sshd"
 
