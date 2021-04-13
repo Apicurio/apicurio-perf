@@ -13,6 +13,8 @@ RUN rm -rf /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_dsa_key
 
 RUN useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 simpass)" simuser
 
+RUN rm -rf /run/nologin
+
 EXPOSE 80
 EXPOSE 22
 
