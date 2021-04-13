@@ -35,20 +35,20 @@ ls -l /usr/local/bin/inotify*
 echo "------------------------"
 echo ""
 
-echo "Starting httpd"
+#echo "Starting httpd"
 #/usr/sbin/apachectl -DFOREGROUND &
 
-exec /usr/sbin/apachectl -DFOREGROUND -e debug
+#exec /usr/sbin/apachectl -DFOREGROUND -e debug
 
 echo ""
 echo "Watching for simulation log files... (Ctrl-C to stop the aggregator)"
 watchdir=/tmp/logs
 logfile=/tmp/watchlog.txt
 #while : ; do
-#        inotifywait $watchdir|while read path action file; do
-#                ts=$(date +"%C%y%m%d%H%M%S")
-#                echo "$ts :: file: $file :: $action :: $path"
-#                echo "$ts :: file: $file :: $action :: $path">>$logfile
-#        done
+        inotifywait $watchdir|while read path action file; do
+                ts=$(date +"%C%y%m%d%H%M%S")
+                echo "$ts :: file: $file :: $action :: $path"
+                echo "$ts :: file: $file :: $action :: $path">>$logfile
+        done
 #done
-#echo "Done!"
+echo "Done!"
