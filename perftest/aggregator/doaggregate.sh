@@ -42,13 +42,16 @@ echo ""
 
 echo ""
 echo "Watching for simulation log files... (Ctrl-C to stop the aggregator)"
-watchdir=/tmp/logs
-logfile=/tmp/watchlog.txt
-#while : ; do
-        inotifywait $watchdir|while read path action file; do
-                ts=$(date +"%C%y%m%d%H%M%S")
-                echo "$ts :: file: $file :: $action :: $path"
-                echo "$ts :: file: $file :: $action :: $path">>$logfile
-        done
-#done
+WATCH_DIR=/tmp/logs
+LOGFILE=/tmp/watchlog.txt
+while : ; do
+    ls -al /tmp/logs
+    inotifywait $WATCH_DIR -t 5
+    sleep 5
+#        inotifywait $watchdir | while read path action file; do
+#                ts=$(date +"%C%y%m%d%H%M%S")
+#                echo "$ts :: file: $file :: $action :: $path"
+#                echo "$ts :: file: $file :: $action :: $path">>$logfile
+#        done
+done
 echo "Done!"
