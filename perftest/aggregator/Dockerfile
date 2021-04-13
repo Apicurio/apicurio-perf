@@ -10,7 +10,8 @@ RUN yum install -y epel-release && \
     mkdir -p /var/www/html
 
 EXPOSE 80
-EXPOSE 873
+EXPOSE 21
+EXPOSE 10000-10100
 
 ADD doaggregate.sh /doaggregate.sh
 ADD html /var/www/html
