@@ -2,6 +2,7 @@
 
 echo "Configuring rsync-daemon"
 cp /tmp/rsyncd.conf /etc/rsyncd.conf
+mkdir -p /var/www/html/logs
 
 echo "Starting rsync-daemon"
 systemctl enable --now rsyncd 
