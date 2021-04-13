@@ -50,7 +50,7 @@ LOGFILE=/tmp/watchlog.txt
 #while : ; do
 
     ls -al $WATCH_DIR
-    inotifywait $WATCH_DIR -t 60
+    inotifywait $WATCH_DIR -t 600
     ls -al $WATCH_DIR
 
 #        inotifywait $watchdir | while read path action file; do
@@ -60,6 +60,3 @@ LOGFILE=/tmp/watchlog.txt
 #        done
 #done
 echo "Done!"
-
-echo "Ctrl-C to stop..." >> /tmp/msg.log
-tail -f /tmp/msg.log
