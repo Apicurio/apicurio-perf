@@ -1,13 +1,9 @@
-FROM openjdk:8-jdk-alpine
-
-# working directory for gatling
-WORKDIR /opt
+FROM centos:8
 
 # gatling version
 ENV GATLING_VERSION 3.5.1
 
 # set environment variables
-ENV PATH /opt/gatling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV GATLING_HOME /opt/gatling
 ENV REGISTRY_URL http://127.0.0.1:8080/apis/registry/v1
 ENV TEST_USERS 10
@@ -18,18 +14,18 @@ ENV TEST_AGGREGATOR_PORT 22
 ENV TEST_AGGREGATOR_USER simuser
 ENV TEST_AGGREGATOR_PASS simpass
 
-# create directory for gatling install
-RUN mkdir -p gatling
-
-# install gatling
-RUN apk add --update wget bash libc6-compat curl openssh-clients sshpass unzip && \
-  mkdir -p /tmp/downloads && \
-  wget -q -O /tmp/downloads/gatling-$GATLING_VERSION.zip \
-     https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/$GATLING_VERSION/gatling-charts-highcharts-bundle-$GATLING_VERSION-bundle.zip && \
-  mkdir -p /tmp/archive && cd /tmp/archive && \
-  unzip /tmp/downloads/gatling-$GATLING_VERSION.zip && \
-  mv /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /opt/gatling/ && \
-  rm -rf /tmp/*
+RUN yum update -y && \
+    yum install -y curl wget unzip zip && \
+    yum install -y openssh-clients sshpass && \
+    yum install -y java-11-openjdk-devel && \
+    mkdir -p /tmp/downloads && \
+    wget -q -O /tmp/downloads/gatling-$GATLING_VERSION.zip \
+       https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/$GATLING_VERSION/gatling-charts-highcharts-bundle-$GATLING_VERSION-bundle.zip && \
+    mkdir -p /tmp/archive && cd /tmp/archive && \
+    unzip /tmp/downloads/gatling-$GATLING_VERSION.zip && \
+    mkdir -p /opt/gatling && \
+    mv /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /opt/gatling/ && \
+    rm -rf /tmp/archive /tmp/downloads
 
 # change context to gatling directory
 WORKDIR  /opt/gatling

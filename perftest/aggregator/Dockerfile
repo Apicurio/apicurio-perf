@@ -2,7 +2,6 @@ FROM centos:8
 
 # gatling version
 ENV GATLING_VERSION 3.5.1
-ENV PATH /opt/gatling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV GATLING_HOME /opt/gatling
 
 
