@@ -60,5 +60,4 @@ then
     /process.sh
 fi
 
-
-echo "Done!"
+echo "Simulation run complete."

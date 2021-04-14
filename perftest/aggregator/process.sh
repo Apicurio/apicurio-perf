@@ -9,7 +9,7 @@ cp -f $LOGS_DIR/*.log $HTML_LOGS_DIR
 
 echo "Copying log files from $LOGS_DIR to $RESULTS_DIR/aggregate"
 mkdir -p $RESULTS_DIR/aggregate
-cp -f $LOGS_DIR/*.log $RESULTS_DIR/aggregate
+cp -f $LOGS_DIR/*.log $RESULTS_DIR/aggregate/
 
 echo "Generating aggregate simulation report..."
 cd /opt/gatling
@@ -17,4 +17,4 @@ cd /opt/gatling
 
 find $GATLING_HOME -name '*.htm*'
 
-echo "Done!"
+echo "Aggregate report generated."
