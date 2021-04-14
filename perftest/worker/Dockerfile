@@ -33,8 +33,8 @@ WORKDIR  /opt/gatling
 
 # add simulations to the docker image
 ADD scala /opt/gatling-simulations
-ADD docker-entrypoint.sh /opt/gatling/docker-entrypoint.sh
+ADD docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod -v +x /docker-entrypoint.sh
 
 # run the test
-ENTRYPOINT ["/opt/gatling/docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
