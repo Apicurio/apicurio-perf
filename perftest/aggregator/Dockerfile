@@ -9,8 +9,7 @@ ENV GATLING_HOME /opt/gatling
 RUN mkdir -p gatling
 
 RUN yum update -y && \
-    yum install -y unzip && \
-    yum install -y httpd && \
+    yum install -y wget unzip httpd && \
     yum install -y openssh-server openssh-clients && \
     yum install -y java-11-openjdk-devel && \
     wget -q -O /tmp/downloads/gatling-$GATLING_VERSION.zip \
