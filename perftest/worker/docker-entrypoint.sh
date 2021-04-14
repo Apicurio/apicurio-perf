@@ -34,16 +34,21 @@ echo "Test complete"
 
 if [ "x$TEST_REPORT_RESULTS" = "xtrue" ]
 then
+  mkdir -p /tmp/uploads
   echo "Uploading simulation log..."
+
+  # Find and stage the simulation.log file into /tmp/uploads
   UUID=`cat /proc/sys/kernel/random/uuid`
   LOG_NAME=simulation-$UUID.log
-  mv /opt/gatling/results/basicsimulation-*/simulation.log /opt/gatling/reports/$LOG_NAME
+  UPLOAD_FILE=/tmp/uploads/$LOG_NAME
+  find /opt/gatling/results/ -name 'simulation.log' -exec cp {} $UPLOAD_FILE \;
+
   # upload the simulation file
-  echo "Uploading the simulation file: $LOG_NAME"
+  echo "Uploading the simulation file: $UPLOAD_FILE"
   sshpass -v -p "$TEST_AGGREGATOR_PASS" scp -P $TEST_AGGREGATOR_PORT \
     -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
-    /opt/gatling/reports/$LOG_NAME \
+    $UPLOAD_FILE \
     $TEST_AGGREGATOR_USER@$TEST_AGGREGATOR_HOST:/home/simuser/logs/$LOG_NAME
 
   # process the uploaded simulation file
