@@ -5,15 +5,12 @@ rm -rf /run/httpd/* /tmp/httpd*
 LOGS_DIR=/home/simuser/logs
 HTML_LOGS_DIR=/var/www/html/logs
 
-mkdir -p $LOGS_DIR
 
-echo "-------------- java -version"
-java -version
-echo "--------------"
-
-echo "Configuring upload directory"
 mkdir -p $LOGS_DIR
+mkdir -p $HTML_LOGS_DIR
 chown simuser $LOGS_DIR
+chown simuser $HTML_LOGS_DIR
+
 
 echo "Configuring sshd"
 
