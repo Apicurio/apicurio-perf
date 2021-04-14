@@ -10,7 +10,7 @@ mkdir -p $LOGS_DIR
 mkdir -p $HTML_LOGS_DIR
 chown simuser $LOGS_DIR
 chown simuser $HTML_LOGS_DIR
-
+chown -R simuser $GATLING_HOME
 
 echo "Configuring sshd"
 
