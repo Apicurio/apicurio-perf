@@ -14,6 +14,9 @@ ENV TEST_USERS 10
 ENV TEST_RAMP_TIME 30
 ENV TEST_REPORT_RESULTS false
 ENV TEST_AGGREGATOR_HOST none
+ENV TEST_AGGREGATOR_PORT 22
+ENV TEST_AGGREGATOR_USER simuser
+ENV TEST_AGGREGATOR_PASS simpass
 
 # create directory for gatling install
 RUN mkdir -p gatling
@@ -33,8 +36,7 @@ WORKDIR  /opt/gatling
 
 # add simulations to the docker image
 ADD scala /opt/gatling-simulations
-ADD dotest.sh /opt/gatling/dotest.sh
+ADD docker-entrypoint.sh /opt/gatling/docker-entrypoint.sh
 
 # run the test
-#ENTRYPOINT ["/opt/gatling/bin/gatling.sh", "-sf", "/opt/gatling-simulations", "-s", "simulations.BasicSimulation"]
-ENTRYPOINT ["/opt/gatling/dotest.sh"]
+ENTRYPOINT ["/opt/gatling/docker-entrypoint.sh"]
