@@ -14,7 +14,8 @@ ENV TEST_AGGREGATOR_PORT 22
 ENV TEST_AGGREGATOR_USER simuser
 ENV TEST_AGGREGATOR_PASS simpass
 
-RUN yum update -y && \
+RUN yum install -y epel-release && \
+    yum update -y && \
     yum install -y curl wget unzip zip && \
     yum install -y openssh-clients sshpass && \
     yum install -y java-11-openjdk-devel && \
