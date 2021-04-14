@@ -10,12 +10,12 @@ RUN yum update -y && \
     yum install -y wget unzip httpd && \
     yum install -y openssh-server openssh-clients && \
     yum install -y java-11-openjdk-devel && \
-    mkdir -p gatling && \
+    mkdir -p $GATLING_HOME && \
     mkdir -p /tmp/downloads && \
     wget -q -O /tmp/downloads/gatling-$GATLING_VERSION.zip \
       https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/$GATLING_VERSION/gatling-charts-highcharts-bundle-$GATLING_VERSION-bundle.zip && \
-    mkdir -p /tmp/archive && cd /tmp/archive && \
-    unzip /tmp/downloads/gatling-$GATLING_VERSION.zip && \
+    mkdir -p /tmp/archive && \
+    unzip /tmp/downloads/gatling-$GATLING_VERSION.zip -d /tmp/archive && \
     mv /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /opt/gatling/ && \
     mkdir -p /var/www/html
 
