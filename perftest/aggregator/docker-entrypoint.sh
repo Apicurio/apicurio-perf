@@ -43,33 +43,4 @@ echo "Starting SSH server"
 /usr/sbin/sshd -D &
 
 echo "Starting httpd"
-/usr/sbin/apachectl -DFOREGROUND &
-
-#exec /usr/sbin/apachectl -DFOREGROUND -e debug
-
-
-echo ""
-echo "Watching for simulation log files... (Ctrl-C to stop the aggregator)"
-WATCH_DIR=$LOGS_DIR
-LOGFILE=/tmp/watchlog.txt
-
-inotifywait -m -e create -e moved_to --format "%f" $WATCH_DIR \
-        | while read FILENAME
-          do
-              echo Detected $FILENAME, processing!
-              mv "$WATCH_DIR/$FILENAME" "$HTML_LOGS_DIR/$FILENAME"
-          done
-
-#while : ; do
-
-#    ls -al $WATCH_DIR
-#    inotifywait $WATCH_DIR -t 600
-#    ls -al $WATCH_DIR
-
-#        inotifywait $watchdir | while read path action file; do
-#                ts=$(date +"%C%y%m%d%H%M%S")
-#                echo "$ts :: file: $file :: $action :: $path"
-#                echo "$ts :: file: $file :: $action :: $path">>$logfile
-#        done
-#done
-echo "Done!"
+/usr/sbin/apachectl -DFOREGROUND
