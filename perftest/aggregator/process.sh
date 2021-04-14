@@ -1,5 +1,6 @@
 #!/bin/sh
 
+GATLING_HOME=/opt/gatling
 LOGS_DIR=/home/simuser/logs
 HTML_LOGS_DIR=/var/www/html/logs
 RESULTS_DIR=$GATLING_HOME/results
