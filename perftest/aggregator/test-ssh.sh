@@ -11,3 +11,6 @@
 #export LFTP_PASSWORD="simpass"
 #lftp -u simuser,simpass -p 5052 localhost -e "cd logs; put simulation.log; bye"
 #sshpass -p "simpass" sftp -P 5022 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null simuser@localhost:/home/simuser/logs/simulation.log simulation.log
+
+
+# sshpass -v -p "simpass" ssh -p 5022 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null simuser@localhost /process.sh
