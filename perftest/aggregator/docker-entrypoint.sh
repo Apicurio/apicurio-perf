@@ -4,12 +4,15 @@ rm -rf /run/httpd/* /tmp/httpd*
 
 LOGS_DIR=/home/simuser/logs
 HTML_LOGS_DIR=/var/www/html/logs
+HTML_REPORT_DIR=/var/www/html/report
 
 
 mkdir -p $LOGS_DIR
 mkdir -p $HTML_LOGS_DIR
+mkdir -p $HTML_REPORT_DIR
 chown simuser $LOGS_DIR
 chown simuser $HTML_LOGS_DIR
+chown simuser $HTML_REPORT_DIR
 
 mkdir -p $GATLING_HOME/results
 chown -R simuser $GATLING_HOME

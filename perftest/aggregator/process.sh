@@ -16,6 +16,7 @@ echo "Generating aggregate simulation report..."
 cd /opt/gatling
 ./bin/gatling.sh -ro aggregate
 
-find $GATLING_HOME -name '*.htm*'
+echo "Copying generated report to httpd"
+cp -rf $RESULTS_DIR/aggregate/* /var/www/html/report
 
 echo "Aggregate report generated."
