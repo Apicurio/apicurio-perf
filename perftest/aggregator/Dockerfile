@@ -34,7 +34,7 @@ RUN mkdir -p $GATLING_HOME && \
       https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/$GATLING_VERSION/gatling-charts-highcharts-bundle-$GATLING_VERSION-bundle.zip && \
     mkdir -p /tmp/archive && \
     unzip /tmp/downloads/gatling-$GATLING_VERSION.zip -d /tmp/archive && \
-    mv /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /opt/gatling/ && \
+    mv /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /apps/gatling/ && \
     mkdir -p /apps/bin && mkdir -p /apps/www/conf
 
 
