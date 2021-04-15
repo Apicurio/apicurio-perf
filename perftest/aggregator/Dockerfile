@@ -42,6 +42,7 @@ ADD conf/httpd.conf /apps/www/conf/httpd.conf
 ADD docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
 ADD process.sh /apps/bin/process.sh
 ADD html /apps/www/html
-RUN chmod -v +x /apps/bin/docker-entrypoint.sh && chmod -v +x /apps/bin/process.sh
+
+#RUN chmod -v +x /apps/bin/docker-entrypoint.sh && chmod -v +x /apps/bin/process.sh
 
 ENTRYPOINT [ "/apps/bin/docker-entrypoint.sh" ]
