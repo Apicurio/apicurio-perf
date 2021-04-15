@@ -10,6 +10,7 @@ HTML_REPORT_DIR=/apps/www/html/report
 echo "Starting httpd"
 /usr/sbin/apachectl -DFOREGROUND -d /apps/www
 
+sleep 60
 
 mkdir -p $LOGS_DIR
 mkdir -p $HTML_LOGS_DIR
