@@ -16,20 +16,27 @@ RUN yum update -y && \
     mkdir -p /tmp/archive && \
     unzip /tmp/downloads/gatling-$GATLING_VERSION.zip -d /tmp/archive && \
     mv /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /opt/gatling/ && \
-    mkdir -p /var/www/html
+    mkdir -p /apps && \
+    chown daemon /apps
 
 RUN rm -rf /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_dsa_key
-
-RUN useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 simpass)" simuser
-
 RUN rm -rf /run/nologin
 
-EXPOSE 80
-EXPOSE 22
+RUN useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 daemon)" daemon
+RUN useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 simpass)" simuser
 
-ADD docker-entrypoint.sh /docker-entrypoint.sh
-ADD process.sh /process.sh
-ADD html /var/www/html
-RUN chmod -v +x /docker-entrypoint.sh && chmod -v +x /process.sh
+EXPOSE 8080
+EXPOSE 8022
 
-ENTRYPOINT [ "/docker-entrypoint.sh" ]
+USER simuser
+RUN mkdir -p /home/simuser/logs
+
+USER daemon
+
+ADD conf/httpd.conf /apps/www/conf/httpd.conf
+ADD docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
+ADD process.sh /apps/bin/process.sh
+ADD html /apps/www/html
+RUN chmod -v +x /apps/bin/docker-entrypoint.sh && chmod -v +x /apps/bin/process.sh
+
+ENTRYPOINT [ "/apps/bin/docker-entrypoint.sh" ]

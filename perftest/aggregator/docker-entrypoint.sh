@@ -3,8 +3,12 @@
 rm -rf /run/httpd/* /tmp/httpd*
 
 LOGS_DIR=/home/simuser/logs
-HTML_LOGS_DIR=/var/www/html/logs
-HTML_REPORT_DIR=/var/www/html/report
+HTML_LOGS_DIR=/apps/www/html/logs
+HTML_REPORT_DIR=/apps/www/html/report
+
+
+echo "Starting httpd"
+/usr/sbin/apachectl -DFOREGROUND -d /apps/www
 
 
 mkdir -p $LOGS_DIR
@@ -46,4 +50,4 @@ echo "Starting SSH server"
 /usr/sbin/sshd -D &
 
 echo "Starting httpd"
-/usr/sbin/apachectl -DFOREGROUND
+/usr/sbin/apachectl -DFOREGROUND -d /apps/www
