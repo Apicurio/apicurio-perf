@@ -1,0 +1,100 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apicurio-perftest
+  labels:
+    app: apicurio-perftest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: perftest
+  template:
+    metadata:
+      labels:
+        app: apicurio-perftest
+        name: perftest
+    spec:
+      containers:
+        - name: apicurio-perftest-aggregator
+          image: apicurio/apicurio-perftest-aggregator:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 22
+              protocol: TCP
+          env:
+            - name: LOG_LEVEL
+              value: DEBUG
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+  strategy:
+    type: Recreate
+---
+# Services for the components
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apicurio-perftest
+    template: apicurio-perftest
+  name: aggregator-service
+spec:
+  selector:
+    app: apicurio-perftest
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+      name: http
+    - port: 22
+      protocol: TCP
+      targetPort: 22
+      name: ssh
+  sessionAffinity: None
+status:
+  loadBalancer: {}
+---
+# Routes
+apiVersion: v1
+kind: Route
+metadata:
+  name: aggregator
+  labels:
+    app: apicurio-perftest
+    template: apicurio-perftest
+spec:
+  to:
+    kind: Service
+    name: aggregator-service
+    weight: 100
+  wildcardPolicy: None
+---
