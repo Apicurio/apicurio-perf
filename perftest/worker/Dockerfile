@@ -30,7 +30,7 @@ RUN mkdir -p $GATLING_HOME && \
     mkdir -p /tmp/archive && \
     unzip /tmp/downloads/gatling-$GATLING_VERSION.zip -d /tmp/archive && \
     mv /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /apps/gatling/ && \
-    mkdir -p /apps/bin && mkdir
+    mkdir -p /apps/bin
 
 # change context to gatling directory
 WORKDIR  /opt/gatling
