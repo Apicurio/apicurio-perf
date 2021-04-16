@@ -8,8 +8,6 @@ export TEST_RAMP_TIME
 export TEST_REPORT_RESULTS
 export TEST_AGGREGATOR_HOST
 export TEST_AGGREGATOR_PORT
-export TEST_AGGREGATOR_USER
-export TEST_AGGREGATOR_PASS
 
 echo "-------------------------------------------------------------------------"
 echo "Running Apicurio Registry Performance Test (load generator)"
@@ -22,13 +20,12 @@ echo "TEST_RAMP_TIME: $TEST_RAMP_TIME"
 echo "TEST_REPORT_RESULTS: $TEST_REPORT_RESULTS"
 echo "TEST_AGGREGATOR_HOST: $TEST_AGGREGATOR_HOST"
 echo "TEST_AGGREGATOR_PORT: $TEST_AGGREGATOR_PORT"
-echo "TEST_AGGREGATOR_USER: $TEST_AGGREGATOR_USER"
 echo "-------------------------------------------------------------------------"
 
 curl $REGISTRY_URL/search/artifacts --fail
 
-cd /opt/gatling
-./bin/gatling.sh -nr -sf /opt/gatling-simulations -s simulations.BasicSimulation
+cd /apps/gatling
+./bin/gatling.sh -nr -sf /apps/gatling/simulations -s simulations.BasicSimulation
 
 echo "Test complete"
 
@@ -45,19 +42,11 @@ then
 
   # upload the simulation file
   echo "Uploading the simulation file: $UPLOAD_FILE"
-  sshpass -v -p "$TEST_AGGREGATOR_PASS" scp -P $TEST_AGGREGATOR_PORT \
-    -o StrictHostKeyChecking=no \
-    -o UserKnownHostsFile=/dev/null \
-    $UPLOAD_FILE \
-    $TEST_AGGREGATOR_USER@$TEST_AGGREGATOR_HOST:/home/simuser/logs/$LOG_NAME
+  curl -X POST -H "Content-Type: text/plain" http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/logs/$LOG_NAME --data-binary @$UPLOAD_FILE
 
   # process the uploaded simulation file
   echo "Generating aggregate report..."
-  sshpass -v -p "simpass" ssh -p $TEST_AGGREGATOR_PORT \
-    -o StrictHostKeyChecking=no \
-    -o UserKnownHostsFile=/dev/null \
-    $TEST_AGGREGATOR_USER@$TEST_AGGREGATOR_HOST \
-    /process.sh
+  curl -X PUT http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/commands/aggregate
 fi
 
 echo "Simulation run complete."
