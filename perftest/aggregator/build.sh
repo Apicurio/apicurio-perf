@@ -3,6 +3,7 @@
 pushd .
 
 rm -rf target
+mkdir -p target
 cd target
 git clone git@github.com:EricWittmann/apicurio-perftest-aggregator.git
 cd apicurio-perftest-aggregator
