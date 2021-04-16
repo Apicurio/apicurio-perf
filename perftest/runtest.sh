@@ -46,3 +46,6 @@ oc apply -f target/worker-job.yaml
 # Monitor workers
 #########################################
 oc get pods
+
+# Note: perhaps use kubectl to wait on the job pods to complete
+#       kubectl wait --for=condition=complete job/myjob
