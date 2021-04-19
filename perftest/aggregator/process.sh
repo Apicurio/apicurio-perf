@@ -1,13 +1,29 @@
 #!/bin/sh
 
-GATLING_HOME=/apps/gatling
-LOGS_DIR=/apps/logs
-HTML_LOGS_DIR=/apps/www/logs
-RESULTS_DIR=$GATLING_HOME/results
+while [ "x$GATLING_HOME" = "x" ]
+do
+  GATLING_HOME=/apps/gatling
+done
 
-echo "Copying log files from $LOGS_DIR to $HTML_LOGS_DIR"
-mkdir -p $HTML_LOGS_DIR
-cp -f $LOGS_DIR/*.log $HTML_LOGS_DIR
+while [ "x$LOGS_DIR" = "x" ]
+do
+  LOGS_DIR=/apps/logs
+done
+
+while [ "x$HTML_DIR" = "x" ]
+do
+  HTML_DIR=/apps/www
+done
+
+while [ "x$RESULTS_DIR" = "x" ]
+do
+  RESULTS_DIR=$GATLING_HOME/results
+done
+
+
+echo "Copying log files from $LOGS_DIR to $HTML_DIR/logs"
+mkdir -p $HTML_DIR/logs
+cp -f $LOGS_DIR/*.log $HTML_DIR/logs/
 
 echo "Copying log files from $LOGS_DIR to $RESULTS_DIR/aggregate"
 mkdir -p $RESULTS_DIR/aggregate
@@ -18,6 +34,7 @@ cd /apps/gatling
 ./bin/gatling.sh -ro aggregate
 
 echo "Copying generated report to web results folder"
-cp -rf $RESULTS_DIR/aggregate/* /apps/www/
+mkdir -p $HTML_DIR/report
+cp -rf $RESULTS_DIR/aggregate/* $HTML_DIR/report/
 
 echo "Aggregate report generated."
