@@ -4,7 +4,8 @@ ENV GATLING_VERSION 3.5.1
 ENV GATLING_HOME /apps/gatling
 
 ENV LOGS_DIR /apps/logs
-ENV RESULTS_DIR /apps/www
+ENV HTML_DIR /apps/www
+ENV RESULTS_DIR /apps/gatling/results
 ENV SHELL_PATH /bin/bash
 ENV PROCESS_SH_PATH /apps/bin/process.sh
 
