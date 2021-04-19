@@ -38,7 +38,10 @@ then
   UUID=`cat /proc/sys/kernel/random/uuid`
   LOG_NAME=simulation-$UUID.log
   UPLOAD_FILE=/tmp/uploads/$LOG_NAME
-  find /opt/gatling/results/ -name 'simulation.log' -exec cp {} $UPLOAD_FILE \;
+  echo "---"
+  find /apps/gatling/ | grep log
+  echo "---"
+  find /apps/gatling/results/ -name 'simulation.log' -exec cp {} $UPLOAD_FILE \;
 
   # upload the simulation file
   echo "Uploading the simulation file: $UPLOAD_FILE"
