@@ -37,4 +37,7 @@ echo "Copying generated report to web results folder"
 mkdir -p $HTML_DIR/report
 cp -rf $RESULTS_DIR/aggregate/* $HTML_DIR/report/
 
+echo "Listing files in $HTML_DIR/report/"
+find $HTML_DIR/report/
+
 echo "Aggregate report generated."
