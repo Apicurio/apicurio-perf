@@ -16,7 +16,8 @@ RUN yum update -y && \
     yum install -y wget unzip && \
     yum install -y java-11-openjdk-devel
 
-RUN useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 quarkus)" quarkus
+RUN addgroup -S quarkus
+RUN useradd --create-home --gid quarkus --shell /bin/bash -p "$(openssl passwd -1 quarkus)" quarkus
 
 USER quarkus
 
