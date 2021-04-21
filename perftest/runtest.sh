@@ -1,7 +1,11 @@
 #!/bin/sh
 
 OCM_API=https://api.stage.openshift.com
-REGISTRY_HOST=apicurio-registry-managed-service-registry.apps.srs-reg-mem.0c9j.s1.devshift.org
+
+while [ "x$REGISTRY_HOST" = "x" ]
+do
+  read -p "Registry Host: " REGISTRY_HOST
+done
 
 # Get kube admin credentials
 #########################################

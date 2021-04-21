@@ -16,13 +16,13 @@ spec:
         imagePullPolicy: Always
         env:
           - name: REGISTRY_URL
-            value: http://REGISTRY_HOST/apis/registry/v1
+            value: "http://REGISTRY_HOST/apis/registry/v1"
           - name: TEST_USERS
-            value: 10
+            value: "10"
           - name: TEST_RAMP_TIME
-            value: 10
+            value: "10"
           - name: TEST_REPORT_RESULTS
-            value: true
+            value: "true"
           - name: TEST_AGGREGATOR_HOST
-            value: aggregator-service
+            value: "aggregator-service"
       restartPolicy: OnFailure    

@@ -21,13 +21,11 @@ spec:
           image: apicurio/apicurio-perftest-aggregator:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 80
-              protocol: TCP
-            - containerPort: 22
+            - containerPort: 8080
               protocol: TCP
           env:
             - name: LOG_LEVEL
-              value: DEBUG
+              value: "DEBUG"
           resources:
             limits:
               cpu: 1000m
@@ -37,8 +35,8 @@ spec:
               memory: 512Mi
           livenessProbe:
             httpGet:
-              path: /
-              port: 80
+              path: /ready
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 5
             timeoutSeconds: 5
@@ -47,8 +45,8 @@ spec:
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /
-              port: 80
+              path: /ready
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 5
             timeoutSeconds: 5
@@ -73,12 +71,8 @@ spec:
   ports:
     - port: 80
       protocol: TCP
-      targetPort: 80
+      targetPort: 8080
       name: http
-    - port: 22
-      protocol: TCP
-      targetPort: 22
-      name: ssh
   sessionAffinity: None
 status:
   loadBalancer: {}
