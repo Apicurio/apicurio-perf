@@ -16,13 +16,13 @@ RUN yum update -y && \
     yum install -y wget unzip && \
     yum install -y java-11-openjdk-devel
 
-RUN addgroup -S quarkus
+RUN groupadd quarkus
 RUN useradd --create-home --gid quarkus --shell /bin/bash -p "$(openssl passwd -1 quarkus)" quarkus
 
 USER quarkus
 
-ADD --chown=quarkus docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
-ADD --chown=quarkus process.sh /apps/bin/process.sh
-ADD --chown=quarkus target/aggregator /apps/bin/aggregator
+ADD --chown=quarkus:quarkus docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
+ADD --chown=quarkus:quarkus process.sh /apps/bin/process.sh
+ADD --chown=quarkus:quarkus target/aggregator /apps/bin/aggregator
 
 ENTRYPOINT [ "/apps/bin/docker-entrypoint.sh" ]
