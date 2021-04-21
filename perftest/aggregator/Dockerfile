@@ -18,6 +18,9 @@ RUN yum update -y && \
 
 RUN groupadd quarkus
 RUN useradd --create-home --gid quarkus --shell /bin/bash -p "$(openssl passwd -1 quarkus)" quarkus
+RUN mkdir -p /apps/bin
+RUN chown -R quarkus /apps
+RUN chgrp -R quarkus /apps
 
 USER quarkus
 
