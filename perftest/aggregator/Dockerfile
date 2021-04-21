@@ -24,6 +24,9 @@ RUN chgrp -R quarkus /apps
 
 USER quarkus
 
+RUN ls -al / | grep apps
+RUN ls -al /apps
+
 ADD --chown=quarkus:quarkus docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
 ADD --chown=quarkus:quarkus process.sh /apps/bin/process.sh
 ADD --chown=quarkus:quarkus target/aggregator /apps/bin/aggregator
