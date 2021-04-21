@@ -24,13 +24,13 @@ RUN chgrp -R quarkus /apps
 
 USER quarkus
 
-RUN ls -al / | grep apps
-RUN ls -al /apps
-
 ADD --chown=quarkus:quarkus docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
 ADD --chown=quarkus:quarkus process.sh /apps/bin/process.sh
 ADD --chown=quarkus:quarkus target/aggregator /apps/bin/aggregator
 
+RUN chmod 700 /apps/bin/process.sh
+RUN chmod 700 /apps/bin/docker-entrypoint.sh
+RUN chmod 700 /apps/bin/aggregator
 RUN find /apps -exec ls -al {} \;
 
 ENTRYPOINT [ "/apps/bin/docker-entrypoint.sh" ]
