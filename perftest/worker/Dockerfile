@@ -15,10 +15,9 @@ ENV TEST_AGGREGATOR_PORT 80
 RUN yum install -y epel-release && \
     yum update -y && \
     yum install -y curl wget unzip zip && \
-    yum install -y java-11-openjdk-devel
-
-RUN useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 worker)" worker
-RUN mkdir -p /apps && chown worker /apps
+    yum install -y java-11-openjdk-devel && \
+    useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 worker)" worker && \
+    mkdir -p /apps && chown worker /apps
 
 USER worker
 
@@ -38,7 +37,7 @@ WORKDIR  /opt/gatling
 # add simulations to the docker image
 ADD --chown=worker scala /apps/gatling/simulations
 ADD --chown=worker docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
-RUN chmod -v +x /apps/bin/docker-entrypoint.sh
+RUN chown -R worker /apps && chmod -R 777 /apps
 
 # run the test
 ENTRYPOINT ["/apps/bin/docker-entrypoint.sh"]
