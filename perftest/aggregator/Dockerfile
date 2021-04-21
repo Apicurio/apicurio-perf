@@ -24,9 +24,9 @@ ADD --chown=quarkus:quarkus docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
 ADD --chown=quarkus:quarkus process.sh /apps/bin/process.sh
 ADD --chown=quarkus:quarkus target/aggregator /apps/bin/aggregator
 
-RUN chmod 700 /apps/bin/process.sh && \
-    chmod 700 /apps/bin/docker-entrypoint.sh && \
-    chmod 700 /apps/bin/aggregator && \
+RUN chmod 777 /apps/bin/process.sh && \
+    chmod 777 /apps/bin/docker-entrypoint.sh && \
+    chmod 777 /apps/bin/aggregator && \
     find /apps -exec ls -al {} \;
 
 ENTRYPOINT [ "/apps/bin/docker-entrypoint.sh" ]
