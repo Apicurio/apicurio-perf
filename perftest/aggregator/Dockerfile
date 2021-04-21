@@ -31,4 +31,6 @@ ADD --chown=quarkus:quarkus docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
 ADD --chown=quarkus:quarkus process.sh /apps/bin/process.sh
 ADD --chown=quarkus:quarkus target/aggregator /apps/bin/aggregator
 
+RUN find /apps -exec ls -al {} \;
+
 ENTRYPOINT [ "/apps/bin/docker-entrypoint.sh" ]
