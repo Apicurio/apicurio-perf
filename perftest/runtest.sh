@@ -33,7 +33,7 @@ AGGREGATOR_HOST=`oc get route -o json | jq -r .items[0].spec.host`
 
 echo "----------"
 echo "Success!"
-echo "Aggregator Web: http://$APP_HOST"
+echo "Aggregator Web: http://$AGGREGATOR_HOST"
 echo "----------"
 
 # Update job YAML with env var values

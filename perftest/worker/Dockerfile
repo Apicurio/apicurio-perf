@@ -6,6 +6,7 @@ ENV GATLING_VERSION 3.5.1
 # set environment variables
 ENV GATLING_HOME /apps/gatling
 ENV REGISTRY_URL http://127.0.0.1:8080/apis/registry/v1
+ENV TEST_SIMULATION BasicSimulation
 ENV TEST_USERS 10
 ENV TEST_RAMP_TIME 30
 ENV TEST_REPORT_RESULTS false

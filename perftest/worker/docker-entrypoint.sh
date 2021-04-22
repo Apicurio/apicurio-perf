@@ -3,6 +3,7 @@
 export PATH
 export GATLING_HOME
 export REGISTRY_URL
+export TEST_SIMULATION
 export TEST_USERS
 export TEST_RAMP_TIME
 export TEST_REPORT_RESULTS
@@ -15,6 +16,7 @@ echo "---"
 echo "PATH: $PATH"
 echo "GATLING_HOME: $GATLING_HOME"
 echo "REGISTRY_URL: $REGISTRY_URL"
+echo "TEST_SIMULATION: $TEST_SIMULATION"
 echo "TEST_USERS: $TEST_USERS"
 echo "TEST_RAMP_TIME: $TEST_RAMP_TIME"
 echo "TEST_REPORT_RESULTS: $TEST_REPORT_RESULTS"
@@ -25,7 +27,7 @@ echo "-------------------------------------------------------------------------"
 curl $REGISTRY_URL/search/artifacts --fail
 
 cd /apps/gatling
-./bin/gatling.sh -nr -sf /apps/gatling/simulations -s simulations.BasicSimulation
+./bin/gatling.sh -nr -sf /apps/gatling/simulations -s simulations.$TEST_SIMULATION
 
 echo "Test complete"
 
