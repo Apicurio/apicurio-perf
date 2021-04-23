@@ -24,7 +24,7 @@ class KafkaAppSimulation extends Simulation {
   val scn = scenario("Kafka App Simulation")
     .exec(session => session.set("idx", "" + (rando.nextInt(users * 2) + 100)))
     .exec(http("create_artifact")
-        .post("/registry/v2/groups/default/artifacts")
+        .post("/groups/default/artifacts")
         .header("X-Registry-ArtifactId", "KafkaAppArtifact-${idx}")
         .queryParam("ifExists", "RETURN")
         .body(StringBody("{ \"openapi\": \"3.0.2\", \"info\": { \"title\": \"Test Artifact ${idx}\"  } }"))
