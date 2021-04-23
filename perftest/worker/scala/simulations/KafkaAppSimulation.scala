@@ -34,7 +34,7 @@ class FetchByIdSimulation extends Simulation {
     )
 
     .repeat(300)(
-        .exec(http("get_by_globalId")
+        exec(http("get_by_globalId")
           .get("/ids/${globalId}")
         )
         .pause(1)
