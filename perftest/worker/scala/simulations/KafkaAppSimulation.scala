@@ -35,7 +35,7 @@ class KafkaAppSimulation extends Simulation {
 
     .repeat(300)(
         exec(http("get_by_globalId")
-          .get("/ids/${globalId}")
+          .get("/ids/globalIds/${globalId}")
         )
         .pause(1)
     )
