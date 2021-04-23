@@ -14,5 +14,5 @@ docker run --network="host" -it \
     -e TEST_REPORT_RESULTS=true \
     -e TEST_AGGREGATOR_HOST=localhost \
     -e TEST_AGGREGATOR_PORT=5080 \
-    -e TEST_SIMULATION=$TEST_SIMULATION
+    -e TEST_SIMULATION=$TEST_SIMULATION \
     apicurio/apicurio-perftest-worker:latest
