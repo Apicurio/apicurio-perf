@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 // This simulation assumes there are 100k artifacts already added to the storage.
 class KafkaAppSimulation extends Simulation {
 
-  val registryUrl = scala.util.Properties.envOrElse("REGISTRY_URL", "http://localhost:8080/apis/registry/v1")
+  val registryUrl = scala.util.Properties.envOrElse("REGISTRY_URL", "http://localhost:8080/apis/registry/v2")
   val users = scala.util.Properties.envOrElse("TEST_USERS", "100").toInt
   val ramp = scala.util.Properties.envOrElse("TEST_RAMP_TIME", "60").toInt
 
