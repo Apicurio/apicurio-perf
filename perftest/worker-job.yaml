@@ -3,9 +3,9 @@ kind: Job
 metadata:
   name: worker
 spec:
-  parallelism: 1
-  completions: 1
-  backoffLimit: 6
+  completions: TEST_WORKERS
+  parallelism: TEST_WORKERS
+  completionMode: Indexed
   template:
     metadata:
       name: worker
@@ -16,13 +16,15 @@ spec:
         imagePullPolicy: Always
         env:
           - name: REGISTRY_URL
-            value: "http://REGISTRY_HOST/apis/registry/v1"
+            value: "http://REGISTRY_HOST/apis/registry/v2"
+          - name: TEST_SIMULATION
+            value: "TEST_SIMULATION_VALUE"
           - name: TEST_USERS
-            value: "10"
+            value: "TEST_USERS_VALUE"
           - name: TEST_RAMP_TIME
-            value: "10"
+            value: "TEST_RAMP_TIME_VALUE"
           - name: TEST_REPORT_RESULTS
             value: "true"
           - name: TEST_AGGREGATOR_HOST
             value: "aggregator-service"
-      restartPolicy: OnFailure    
+      restartPolicy: Never    

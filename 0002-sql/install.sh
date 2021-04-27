@@ -68,6 +68,10 @@ while [ "x$RDS_PASS" = "x" ]
 do
   read -p "RDS Database Password: " RDS_PASS
 done
+while [ "x$REGISTRY_REPLICAS" = "x" ]
+do
+  read -p "# of App Replicas (e.g. 4): " REGISTRY_REPLICAS
+done
 
 # Validate inputs
 #########################################
@@ -167,40 +171,28 @@ echo "RDS Instance successfully provisioned."
 echo "JDBC URL: $RDS_JDBC_URL"
 echo "----------"
 
-# Update deployment YAML with RDS info
-#########################################
-cat registry-deployment.yaml | \
-   sed "s/RDS_HOST/$RDS_HOST/g" | \
-   sed "s/RDS_PORT/$RDS_PORT/g" | \
-   sed "s/RDS_DB/$RDS_DB/g" | \
-   sed "s/RDS_USER/$RDS_USER/g" | \
-   sed "s/RDS_PASS/$RDS_PASS/g" > target/registry-deployment.yaml
+export CLUSTER_ID
+export RDS_INSTANCE
+export RDS_DB=registry
+export RDS_USER
+export RDS_PASS
+export RDS_HOST
+export RDS_PORT
+export PROJECT_NAME=apicurio-registry
+export REGISTRY_REPLICAS
 
-# Get kube admin credentials
-#########################################
-echo "Getting kube admin credentials"
-CLUSTER_USER=`ocm get $OCM_API/api/clusters_mgmt/v1/clusters/$CLUSTER_ID/credentials | jq -r .admin.user`
-CLUSTER_PASSWORD=`ocm get $OCM_API/api/clusters_mgmt/v1/clusters/$CLUSTER_ID/credentials | jq -r .admin.password`
+echo "================================================="
+echo "export CLUSTER_ID=$CLUSTER_ID"
+echo "export RDS_INSTANCE=$RDS_INSTANCE"
+echo "export RDS_DB=registry=$RDS_DB"
+echo "export RDS_USER=$RDS_USER"
+echo "export RDS_PASS=$RDS_PASS"
+echo "export RDS_HOST=$RDS_HOST"
+echo "export RDS_PORT=$RDS_PORT"
+echo "export PROJECT_NAME=$PROJECT_NAME"
+echo "export REGISTRY_REPLICAS=$REGISTRY_REPLICAS"
+echo "================================================="
 
-# Login to cluster
-#########################################
-echo "Logging in to cluster using 'oc login'"
-oc login --insecure-skip-tls-verify --username=$CLUSTER_USER --server=$CLUSTER_URL --password=$CLUSTER_PASSWORD
+echo "OCM install complete.  Deploying application."
 
-# Install application to cluster
-#########################################
-echo "Creating project and deploying registry"
-oc new-project managed-service-registry
-oc apply -f target/registry-deployment.yaml
-
-# Wait for application to be deployed
-#########################################
-echo "Waiting for application deployment to complete..."
-sleep 30
-echo "Getting application route/host."
-APP_HOST=`oc get route -o json | jq -r .items[0].spec.host`
-
-echo "----------"
-echo "Success!"
-echo "Application host: http://$APP_HOST"
-echo "----------"
+exec ./deploy.sh

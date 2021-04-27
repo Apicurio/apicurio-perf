@@ -6,7 +6,7 @@ metadata:
   labels:
     app: apicurio-registry
 spec:
-  replicas: 1
+  replicas: REGISTRY_REPLICAS
   selector:
     matchLabels:
       name: registry

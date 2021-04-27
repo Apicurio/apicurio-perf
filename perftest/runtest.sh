@@ -6,6 +6,23 @@ while [ "x$REGISTRY_HOST" = "x" ]
 do
   read -p "Registry Host: " REGISTRY_HOST
 done
+while [ "x$TEST_SIMULATION" = "x" ]
+do
+  read -p "Simulation: " TEST_SIMULATION
+done
+while [ "x$TEST_USERS" = "x" ]
+do
+  read -p "Number of Test Users: " TEST_USERS
+done
+while [ "x$TEST_RAMP_TIME" = "x" ]
+do
+  read -p "Ramp up Time (seconds): " TEST_RAMP_TIME
+done
+while [ "x$TEST_WORKERS" = "x" ]
+do
+  read -p "Number of Workers: " TEST_WORKERS
+done
+
 
 # Get kube admin credentials
 #########################################
@@ -40,7 +57,13 @@ echo "----------"
 #########################################
 mkdir -p target
 cat worker-job.yaml | \
-   sed "s/REGISTRY_HOST/$REGISTRY_HOST/g" > target/worker-job.yaml
+   sed "s/REGISTRY_HOST/$REGISTRY_HOST/g" | \
+   sed "s/TEST_SIMULATION_VALUE/$TEST_SIMULATION/g" | \
+   sed "s/TEST_WORKERS/$TEST_WORKERS/g" | \
+   sed "s/TEST_WORKERS/$TEST_WORKERS/g" | \
+   sed "s/TEST_USERS_VALUE/$TEST_USERS/g" | \
+   sed "s/TEST_RAMP_TIME_VALUE/$TEST_RAMP_TIME/g" > target/worker-job.yaml
+
 
 # Run worker jobs
 #########################################

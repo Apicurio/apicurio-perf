@@ -14,7 +14,7 @@ class BasicSimulation extends Simulation {
   
 
   val httpProtocol = http
-    .baseUrl(registryUrl) // Here is the root for all relative URLs
+    .baseUrl(registryUrl)
     .acceptHeader("text/html,application/xhtml+xml,application/json,application/xml;q=0.9,*/*;q=0.8") // Here are the common headers
     .acceptEncodingHeader("gzip, deflate")
     .acceptLanguageHeader("en-US,en;q=0.5")

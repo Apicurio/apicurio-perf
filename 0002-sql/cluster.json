@@ -14,7 +14,7 @@
     "name": "REGION"
   },
   "nodes": {
-    "compute": 2,
+    "compute": 4,
     "compute_machine_type": {
       "id": "m5.xlarge"
     }

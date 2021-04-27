@@ -8,8 +8,12 @@ import scala.concurrent.duration._
 // This simulation assumes there are 100k artifacts already added to the storage.
 class FetchByIdSimulation extends Simulation {
 
+  val registryUrl = scala.util.Properties.envOrElse("REGISTRY_URL", "http://localhost:8080/apis/registry/v2")
+  val users = scala.util.Properties.envOrElse("TEST_USERS", "100").toInt
+  val ramp = scala.util.Properties.envOrElse("TEST_RAMP_TIME", "60").toInt
+
   val httpProtocol = http
-    .baseUrl("http://localhost:8080/api") // Here is the root for all relative URLs
+    .baseUrl(registryUrl)
     .acceptHeader("text/html,application/xhtml+xml,application/json,application/xml;q=0.9,*/*;q=0.8") // Here are the common headers
     .acceptEncodingHeader("gzip, deflate")
     .acceptLanguageHeader("en-US,en;q=0.5")
@@ -21,22 +25,22 @@ class FetchByIdSimulation extends Simulation {
     .repeat(1000)(
       exec(session => session.set("idx", "" + (rando.nextInt(90000) + 100)))
       .exec(http("get_latest_version")
-        .get("/artifacts/TestArtifact-${idx}")
+        .get("/groups/default/artifacts/TestArtifact-${idx}")
       )
       .pause(1)
 
       .exec(http("get_latest_metadata")
-        .get("/artifacts/TestArtifact-${idx}/meta")
+        .get("/groups/default/artifacts/TestArtifact-${idx}/meta")
         .check(jsonPath("$.globalId").saveAs("globalId"))
       )
       .pause(1)
 
       .exec(http("get_by_globalId")
-        .get("/ids/${globalId}")
+        .get("/ids/globalIds/${globalId}")
       )
       .pause(1)
       .exec(http("get_by_version")
-        .get("/artifacts/TestArtifact-${idx}/versions/1")
+        .get("/groups/default/artifacts/TestArtifact-${idx}/versions/1")
       )
       .pause(1)
     )

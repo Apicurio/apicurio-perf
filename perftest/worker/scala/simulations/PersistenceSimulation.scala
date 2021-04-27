@@ -7,8 +7,12 @@ import scala.concurrent.duration._
 
 class PersistenceSimulation extends Simulation {
 
+  val registryUrl = scala.util.Properties.envOrElse("REGISTRY_URL", "http://localhost:8080/apis/registry/v2")
+  val users = scala.util.Properties.envOrElse("TEST_USERS", "100").toInt
+  val ramp = scala.util.Properties.envOrElse("TEST_RAMP_TIME", "60").toInt
+
   val httpProtocol = http
-    .baseUrl("http://localhost:8080/api") // Here is the root for all relative URLs
+    .baseUrl(registryUrl)
     .acceptHeader("text/html,application/xhtml+xml,application/json,application/xml;q=0.9,*/*;q=0.8") // Here are the common headers
     .acceptEncodingHeader("gzip, deflate")
     .acceptLanguageHeader("en-US,en;q=0.5")
@@ -24,7 +28,7 @@ class PersistenceSimulation extends Simulation {
     .repeat(200)(
       exec(session => session.set("idx", "" + counter.getAndIncrement()))
       .exec(http("create_artifact")
-        .post("/artifacts")
+        .post("/groups/default/artifacts")
         .header("X-Registry-ArtifactId", "TestArtifact-${idx}")
         .body(StringBody("{ \"openapi\": \"3.0.2\", \"info\": { \"title\": \"Test Artifact ${idx}\"  } }"))
         .check(jsonPath("$.globalId").saveAs("globalId"))
@@ -33,11 +37,11 @@ class PersistenceSimulation extends Simulation {
       .pause(5)
     )
     .exec(http("get_latest_version")
-      .get("/artifacts/${artifactId}")
+      .get("/groups/default/artifacts/${artifactId}")
     )
     .pause(1)
     .exec(http("get_by_globalId")
-      .get("/ids/${globalId}")
+      .get("/globalIds/ids/${globalId}")
     )
     .pause(1)
     .exec(http("search_all")
@@ -58,7 +62,7 @@ class PersistenceSimulation extends Simulation {
       )
       .pause(1)
       .exec(http("get_by_globalId")
-        .get("/ids/${globalId}")
+        .get("/ids/globalIds/${globalId}")
       )
     )
 
