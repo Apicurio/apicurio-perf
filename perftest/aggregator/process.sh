@@ -23,11 +23,17 @@ done
 
 echo "Copying log files from $LOGS_DIR to $HTML_DIR/logs"
 mkdir -p $HTML_DIR/logs
+ls -al $LOGS_DIR/*.log
 cp -f $LOGS_DIR/*.log $HTML_DIR/logs/
 
 echo "Copying log files from $LOGS_DIR to $RESULTS_DIR/aggregate"
 mkdir -p $RESULTS_DIR/aggregate
 cp -f $LOGS_DIR/*.log $RESULTS_DIR/aggregate/
+
+echo "-------------------------------------"
+echo "Aggregating simulation report from the following files:"
+ls -al $RESULTS_DIR/aggregate/
+echo "-------------------------------------"
 
 echo "Generating aggregate simulation report..."
 cd /apps/gatling

@@ -46,12 +46,15 @@ then
   find /apps/gatling/results/ -name 'simulation.log' -exec cp {} $UPLOAD_FILE \;
 
   # upload the simulation file
+  echo "------------------------"
   echo "Uploading the simulation file: $UPLOAD_FILE"
+  ls -al $UPLOAD_FILE
   curl -X POST -H "Content-Type: text/plain" http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/logs/$LOG_NAME --data-binary @$UPLOAD_FILE
+  echo "------------------------"
 
   # process the uploaded simulation file
-  echo "Generating aggregate report..."
-  curl -X PUT http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/commands/aggregate
+  #echo "Generating aggregate report..."
+  #url -X PUT http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/commands/aggregate
 fi
 
 echo "Simulation run complete."
