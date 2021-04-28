@@ -19,6 +19,8 @@ spec:
             value: "http://REGISTRY_HOST/apis/registry/v2"
           - name: TEST_SIMULATION
             value: "TEST_SIMULATION_VALUE"
+          - name: TEST_ITERATIONS
+            value: "TEST_ITERATIONS_VALUE"
           - name: TEST_USERS
             value: "TEST_USERS_VALUE"
           - name: TEST_RAMP_TIME

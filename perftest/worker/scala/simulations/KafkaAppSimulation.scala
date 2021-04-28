@@ -11,6 +11,7 @@ class KafkaAppSimulation extends Simulation {
   val registryUrl = scala.util.Properties.envOrElse("REGISTRY_URL", "http://localhost:8080/apis/registry/v2")
   val users = scala.util.Properties.envOrElse("TEST_USERS", "100").toInt
   val ramp = scala.util.Properties.envOrElse("TEST_RAMP_TIME", "60").toInt
+  val iterations = scala.util.Properties.envOrElse("TEST_ITERATIONS", "300").toInt
 
   val httpProtocol = http
     .baseUrl(registryUrl)
@@ -33,7 +34,7 @@ class KafkaAppSimulation extends Simulation {
         .check(jsonPath("$.id").saveAs("artifactId"))
     )
 
-    .repeat(300)(
+    .repeat(iterations)(
         exec(http("get_by_globalId")
           .get("/ids/globalIds/${globalId}")
         )

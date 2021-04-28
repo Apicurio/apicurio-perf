@@ -10,6 +10,10 @@ while [ "x$TEST_SIMULATION" = "x" ]
 do
   read -p "Simulation: " TEST_SIMULATION
 done
+while [ "x$TEST_ITERATIONS" = "x" ]
+do
+  read -p "Iterations: " TEST_ITERATIONS
+done
 while [ "x$TEST_USERS" = "x" ]
 do
   read -p "Number of Test Users: " TEST_USERS
@@ -61,6 +65,7 @@ cat worker-job.yaml | \
    sed "s/TEST_SIMULATION_VALUE/$TEST_SIMULATION/g" | \
    sed "s/TEST_WORKERS/$TEST_WORKERS/g" | \
    sed "s/TEST_WORKERS/$TEST_WORKERS/g" | \
+   sed "s/TEST_ITERATIONS_VALUE/$TEST_ITERATIONS/g" | \
    sed "s/TEST_USERS_VALUE/$TEST_USERS/g" | \
    sed "s/TEST_RAMP_TIME_VALUE/$TEST_RAMP_TIME/g" > target/worker-job.yaml
 
