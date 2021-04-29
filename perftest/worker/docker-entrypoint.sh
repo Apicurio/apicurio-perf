@@ -53,7 +53,9 @@ then
   ls -al
   zip $UPLOAD_FILE.zip $LOG_NAME
   ls -al
-  curl --raw -v -i -X POST -H "Content-Type: application/zip" http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/logs/$LOG_NAME.zip --data-binary @$UPLOAD_FILE.zip
+  UPLOAD_URL=http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/logs/$LOG_NAME.zip
+  echo "Uploading to: $UPLOAD_URL"
+  curl --raw -v -i -X POST -H "Content-Type: application/zip" $UPLOAD_URL --data-binary @$UPLOAD_FILE.zip
   echo "------------------------"
 
   # process the uploaded simulation file
