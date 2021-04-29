@@ -48,8 +48,12 @@ then
   # upload the simulation file
   echo "------------------------"
   echo "Uploading the simulation file: $UPLOAD_FILE"
-  ls -al $UPLOAD_FILE
-  curl -X POST -H "Content-Type: text/plain" http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/logs/$LOG_NAME --data-binary @$UPLOAD_FILE
+  echo ""
+  cd /tmp/uploads
+  ls -al
+  zip $UPLOAD_FILE.zip $LOG_NAME
+  ls -al
+  curl -X POST -H "Content-Type: application/zip" http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/logs/$LOG_NAME.zip --data-binary @$UPLOAD_FILE.zip
   echo "------------------------"
 
   # process the uploaded simulation file

@@ -13,7 +13,7 @@ EXPOSE 8080
 
 # Install apps
 RUN yum update -y && \
-    yum install -y wget unzip && \
+    yum install -y wget zip unzip && \
     yum install -y java-11-openjdk-devel && \
     groupadd quarkus && \
     useradd --create-home --gid quarkus --shell /bin/bash -p "$(openssl passwd -1 quarkus)" quarkus

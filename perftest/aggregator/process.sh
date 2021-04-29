@@ -20,11 +20,15 @@ do
   RESULTS_DIR=$GATLING_HOME/results
 done
 
+echo "Unpacking log ZIP files in $LOGS_DIR"
+cd $LOGS_DIR
+ls -al
+find . -name '*.zip' -exec unzip {} \;
+ls -al
 
 echo "Copying log files from $LOGS_DIR to $HTML_DIR/logs"
-mkdir -p $HTML_DIR/logs
-ls -al $LOGS_DIR/*.log
-cp -f $LOGS_DIR/*.log $HTML_DIR/logs/
+zip $HTML_DIR/logs.zip *.log
+ls -al $HTML_DIR
 
 echo "Copying log files from $LOGS_DIR to $RESULTS_DIR/aggregate"
 mkdir -p $RESULTS_DIR/aggregate
