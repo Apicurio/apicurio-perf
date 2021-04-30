@@ -184,7 +184,7 @@ export REGISTRY_REPLICAS
 echo "================================================="
 echo "export CLUSTER_ID=$CLUSTER_ID"
 echo "export RDS_INSTANCE=$RDS_INSTANCE"
-echo "export RDS_DB=registry=$RDS_DB"
+echo "export RDS_DB=$RDS_DB"
 echo "export RDS_USER=$RDS_USER"
 echo "export RDS_PASS=$RDS_PASS"
 echo "export RDS_HOST=$RDS_HOST"
