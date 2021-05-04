@@ -81,6 +81,7 @@ oc apply -f target/worker-job.yaml
 echo "Job deployed"
 oc get pods
 echo "Waiting for job to complete..."
+sleep 10
 oc wait --for=condition=complete job/worker
 
 # Aggregate results
