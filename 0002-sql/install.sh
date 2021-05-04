@@ -152,7 +152,18 @@ echo "----------"
 
 # Provision RDS instance
 #########################################
-aws rds create-db-instance --db-name $RDS_DB --db-instance-identifier $RDS_INSTANCE --allocated-storage 20 --db-instance-class db.m5.large --engine postgres --master-username $RDS_USER --master-user-password $RDS_PASS --no-multi-az --engine-version 12.5 --publicly-accessible --storage-type gp2
+aws rds create-db-instance \
+    --db-name $RDS_DB \
+    --db-instance-identifier $RDS_INSTANCE \
+    --allocated-storage 100 \
+    --db-instance-class db.m5.4xlarge \
+    --engine postgres \
+    --master-username $RDS_USER \
+    --master-user-password $RDS_PASS \
+    --no-multi-az \
+    --engine-version 12.5 \
+    --publicly-accessible \
+    --storage-type gp2
 
 # Wait for RDS instance to be provisioned
 #########################################

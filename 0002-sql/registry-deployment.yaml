@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: apicurio-registry
-          image: quay.io/apicurio/apicurio-registry-sql:latest-snapshot
+          image: quay.io/apicurio/apicurio-registry-sql:2.0.0.Final
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -40,13 +40,15 @@ spec:
               value: RDS_USER
             - name: REGISTRY_DATASOURCE_PASSWORD
               value: RDS_PASS
+            - name: QUARKUS_DATASOURCE_JDBC_MAX-SIZE
+              value: "200"
           resources:
             limits:
-              cpu: 1000m
-              memory: 1300Mi
+              cpu: "4"
+              memory: 12Gi
             requests:
-              cpu: 200m
-              memory: 600Mi
+              cpu: "3"
+              memory: 2Gi
           livenessProbe:
             httpGet:
               path: /health/live

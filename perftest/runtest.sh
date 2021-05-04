@@ -54,7 +54,8 @@ AGGREGATOR_HOST=`oc get route -o json | jq -r .items[0].spec.host`
 
 echo "----------"
 echo "Success!"
-echo "Aggregator Web: http://$AGGREGATOR_HOST"
+echo "Aggregate command: curl -X PUT http://$AGGREGATOR_HOST/api/aggregator/commands/aggregate"
+echo "Aggregator Report: http://$AGGREGATOR_HOST/w/report"
 echo "----------"
 
 # Update job YAML with env var values
@@ -72,12 +73,23 @@ cat worker-job.yaml | \
 
 # Run worker jobs
 #########################################
-echo "Deploying worker job"
+echo "Deploying job"
 oc apply -f target/worker-job.yaml
 
 # Monitor workers
 #########################################
+echo "Job deployed"
 oc get pods
+echo "Waiting for job to complete..."
+oc wait --for=condition=complete job/worker
 
-# Note: perhaps use kubectl to wait on the job pods to complete
+# Aggregate results
+#########################################
+echo "Aggregating results..."
+curl -X PUT http://$AGGREGATOR_HOST/api/aggregator/commands/aggregate
+
+echo "Done!"
+
+echo "View the report: http://$AGGREGATOR_HOST/w/report"
+
 #       kubectl wait --for=condition=complete job/myjob
