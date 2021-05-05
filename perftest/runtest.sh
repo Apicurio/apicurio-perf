@@ -101,7 +101,7 @@ oc get pods
 sleep 5
 echo "Waiting for job to complete..."
 sleep 10
-oc wait --for=condition=complete job/worker
+oc wait --for=condition=complete job/worker --timeout=45m
 
 # Aggregate results
 #########################################
