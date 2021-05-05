@@ -2,6 +2,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: worker
+  labels:
+    app: registry-perftest
 spec:
   completions: TEST_WORKERS
   parallelism: TEST_WORKERS
@@ -9,6 +11,8 @@ spec:
   template:
     metadata:
       name: worker
+      labels:
+        app: registry-perftest
     spec:
       containers:
       - name: worker

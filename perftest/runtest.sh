@@ -72,13 +72,11 @@ AGGREGATOR_HOST=`oc get route -o json | jq -r .items[0].spec.host`
 
 echo "----------"
 echo "Aggregator successfully deployed!"
-echo "Aggregate command: curl -X PUT http://$AGGREGATOR_HOST/api/aggregator/commands/aggregate"
-echo "Aggregator Report: http://$AGGREGATOR_HOST/w/report"
 echo "----------"
 
-# Update job YAML with env var values
+# Run worker job
 #########################################
-mkdir -p target
+echo "Deploying job"
 cat worker-job.yaml | \
    sed "s/REGISTRY_HOST/$REGISTRY_HOST/g" | \
    sed "s/TEST_SIMULATION_VALUE/$TEST_SIMULATION/g" | \
@@ -86,27 +84,29 @@ cat worker-job.yaml | \
    sed "s/TEST_WORKERS/$TEST_WORKERS/g" | \
    sed "s/TEST_ITERATIONS_VALUE/$TEST_ITERATIONS/g" | \
    sed "s/TEST_USERS_VALUE/$TEST_USERS/g" | \
-   sed "s/TEST_RAMP_TIME_VALUE/$TEST_RAMP_TIME/g" > target/worker-job.yaml
+   sed "s/TEST_RAMP_TIME_VALUE/$TEST_RAMP_TIME/g" | oc apply -f -
 
-
-# Run worker jobs
-#########################################
-echo "Deploying job"
-oc apply -f target/worker-job.yaml
+echo "----------"
+echo "Load generator job successfully deployed!"
+echo "----------"
 
 # Monitor workers
 #########################################
-echo "Job deployed"
-oc get pods
 sleep 5
-echo "Waiting for job to complete..."
-oc wait --for=condition=complete job/worker
+oc get pods
+
+echo ""
+echo "Monitor the cluster and wait for job to complete..."
+# oc wait --for=condition=complete job/worker
 
 # Aggregate results
 #########################################
-echo "Aggregating results..."
-curl -X PUT http://$AGGREGATOR_HOST/api/aggregator/commands/aggregate
+echo ""
+echo "Results aggregation should be triggered automatically when the last worker pod finishes..."
 
-echo "Done!"
+echo "----------"
+echo "In case the workers or the automatic aggregation fails you can trigger the aggregation with"
+echo "Aggregate command: curl -X PUT http://$AGGREGATOR_HOST/api/aggregator/commands/aggregate"
+echo "----------"
 
-echo "View the report: http://$AGGREGATOR_HOST/w/report"
+echo "After that you can view the report at: http://$AGGREGATOR_HOST/w/report"

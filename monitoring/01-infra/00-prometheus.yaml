@@ -1,0 +1,89 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: registry-prometheus
+  namespace: registry-monitoring
+  labels:
+    app: registry-monitoring
+spec:
+  serviceAccountName: prometheus-sa
+  serviceMonitorSelector:
+    matchLabels:
+      system: registry-perftest
+  # serviceMonitorNamespaceSelector:
+  #   matchLabels:
+  #     system: registry
+  alerting:
+    alertmanagers:
+      - name: alertmanager-main
+        namespace: openshift-monitoring
+        port: web
+  enableAdminAPI: true
+  securityContext: {}
+  replicas: 2
+  # ruleSelector:
+  #   matchLabels:
+  #     system: registry
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: registry-prometheus
+  namespace: registry-monitoring
+  labels:
+    app: registry-monitoring
+spec:
+  path: /
+  to:
+    kind: Service
+    name: prometheus-operated
+    weight: 100
+  port:
+    targetPort: web
+  wildcardPolicy: None
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus-sa
+  namespace: registry-monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: prometheus-cl
+  namespace: registry-monitoring
+  labels:
+    app: registry-monitoring
+    system: registry
+rules:
+- apiGroups: [""]
+  resources:
+  - nodes
+  - services
+  - endpoints
+  - pods
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs: ["get"]
+- nonResourceURLs: ["/metrics"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus-clb
+  namespace: registry-monitoring
+  labels:
+    app: registry-monitoring
+    system: registry
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus-cl
+subjects:
+- kind: ServiceAccount
+  name: prometheus-sa
+  namespace: registry-monitoring

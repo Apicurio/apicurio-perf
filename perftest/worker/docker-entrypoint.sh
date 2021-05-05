@@ -26,6 +26,11 @@ echo "-------------------------------------------------------------------------"
 
 curl $REGISTRY_URL/search/artifacts --fail
 
+UUID=`cat /proc/sys/kernel/random/uuid`
+echo "---"
+echo "Reporting worker is starting..."
+curl -X PUT http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/workers/$UUID/start --fail
+
 cd /apps/gatling
 ./bin/gatling.sh -nr -sf /apps/gatling/simulations -s simulations.$TEST_SIMULATION
 
@@ -37,7 +42,6 @@ then
   echo "Uploading simulation log..."
 
   # Find and stage the simulation.log file into /tmp/uploads
-  UUID=`cat /proc/sys/kernel/random/uuid`
   LOG_NAME=simulation-$UUID.log
   UPLOAD_FILE=/tmp/uploads/$LOG_NAME
   echo "---"
@@ -58,9 +62,10 @@ then
   curl --raw -v -i -X POST -H "Content-Type: application/zip" $UPLOAD_URL --data-binary @$UPLOAD_FILE.zip
   echo "------------------------"
 
-  # process the uploaded simulation file
-  #echo "Generating aggregate report..."
-  #url -X PUT http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/commands/aggregate
+  # report the worker finish, this will trigger the processing of the uploaded simulation file
+  echo "Reporting worker finished..."
+  curl -X PUT http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/workers/$UUID/stop --fail
+
 fi
 
 echo "Simulation run complete."
