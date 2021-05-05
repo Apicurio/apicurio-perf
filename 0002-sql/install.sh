@@ -60,6 +60,16 @@ while [ "x$CLUSTER_REGION" = "x" ]
 do
   read -p "Cluster region (e.g. us-east-1): " CLUSTER_REGION
 done
+
+while [ "x$EC2_SIZE" = "x" ]
+do
+  read -p "EC2 Size (e.g. m5.xlarge): " EC2_SIZE
+done
+while [ "x$EC2_COUNT" = "x" ]
+do
+  read -p "# of cluster workers (e.g. 2): " EC2_COUNT
+done
+
 while [ "x$RDS_USER" = "x" ]
 do
   read -p "RDS Database Username: " RDS_USER
@@ -108,7 +118,11 @@ jq ".region.id = \"$CLUSTER_REGION\"" $WORK_DIR/_cluster.tmp4.json > $WORK_DIR/_
 jq ".region.display_name = \"$CLUSTER_REGION\"" $WORK_DIR/_cluster.tmp5.json > $WORK_DIR/_cluster.tmp6.json
 jq ".region.name = \"$CLUSTER_REGION\"" $WORK_DIR/_cluster.tmp6.json > $WORK_DIR/_cluster.tmp7.json
 
-mv $WORK_DIR/_cluster.tmp7.json $WORK_DIR/cluster.json
+jq ".nodes.compute_machine_type.id = \"$EC2_SIZE\"" $WORK_DIR/_cluster.tmp7.json > $WORK_DIR/_cluster.tmp8.json
+jq ".nodes.compute = $EC2_COUNT" $WORK_DIR/_cluster.tmp8.json > $WORK_DIR/_cluster.tmp9.json
+
+
+mv $WORK_DIR/_cluster.tmp9.json $WORK_DIR/cluster.json
 rm $WORK_DIR/_cluster.tmp*.json
 
 # Create cluster
