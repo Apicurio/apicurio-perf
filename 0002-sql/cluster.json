@@ -16,7 +16,7 @@
   "nodes": {
     "compute": 6,
     "compute_machine_type": {
-      "id": "m5.xlarge"
+      "id": "m5.2xlarge"
     }
   },
   "version": {
