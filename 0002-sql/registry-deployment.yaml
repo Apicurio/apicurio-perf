@@ -29,9 +29,9 @@ spec:
             - name: REGISTRY_ENABLE_MULTITENANCY
               value: "false"
             - name: REGISTRY_LOG_LEVEL
-              value: DEBUG
+              value: INFO
             - name: LOG_LEVEL
-              value: DEBUG
+              value: INFO
             - name: QUARKUS_PROFILE
               value: prod
             - name: REGISTRY_DATASOURCE_URL
