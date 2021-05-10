@@ -163,61 +163,23 @@ echo "Cluster URL: $CLUSTER_URL"
 CLUSTER_CONSOLE=`ocm get "$OCM_API/api/clusters_mgmt/v1/clusters" | jq -r "(.items[] | select(.id | contains(\"$CLUSTER_ID\"))).console.url"`
 echo "Cluster Console URL: $CLUSTER_CONSOLE"
 echo "----------"
-
-# Provision RDS instance
-#########################################
-aws rds create-db-instance \
-    --db-name $RDS_DB \
-    --db-instance-identifier $RDS_INSTANCE \
-    --allocated-storage 100 \
-    --db-instance-class db.m5.4xlarge \
-    --engine postgres \
-    --master-username $RDS_USER \
-    --master-user-password $RDS_PASS \
-    --no-multi-az \
-    --engine-version 12.5 \
-    --publicly-accessible \
-    --storage-type gp2
-
-# Wait for RDS instance to be provisioned
-#########################################
-RDS_STATUS=
-while [ "x$RDS_STATUS" != "xavailable" ]
-do
-  sleep 10
-  RDS_STATUS=`aws rds describe-db-instances | jq -r "(.DBInstances[] | select(.DBInstanceIdentifier | contains(\"$RDS_INSTANCE\"))).DBInstanceStatus"`
-  echo "RDS instance status: $RDS_STATUS"
-done
-RDS_HOST=`aws rds describe-db-instances | jq -r "(.DBInstances[] | select(.DBInstanceIdentifier | contains(\"$RDS_INSTANCE\"))).Endpoint.Address"`
-RDS_PORT=`aws rds describe-db-instances | jq -r "(.DBInstances[] | select(.DBInstanceIdentifier | contains(\"$RDS_INSTANCE\"))).Endpoint.Port"`
-RDS_JDBC_URL=jdbs:postgresql://$RDS_HOST:$RDS_PORT/registry
-echo "----------"
-echo "RDS Instance successfully provisioned."
-echo "JDBC URL: $RDS_JDBC_URL"
-echo "----------"
-
-export CLUSTER_ID
-export RDS_INSTANCE
-export RDS_DB=registry
-export RDS_USER
-export RDS_PASS
-export RDS_HOST
-export RDS_PORT
-export PROJECT_NAME=apicurio-registry
-export REGISTRY_REPLICAS
-
 echo "================================================="
 echo "export CLUSTER_ID=$CLUSTER_ID"
-echo "export RDS_INSTANCE=$RDS_INSTANCE"
-echo "export RDS_DB=$RDS_DB"
-echo "export RDS_USER=$RDS_USER"
-echo "export RDS_PASS=$RDS_PASS"
-echo "export RDS_HOST=$RDS_HOST"
-echo "export RDS_PORT=$RDS_PORT"
 echo "export PROJECT_NAME=$PROJECT_NAME"
 echo "export REGISTRY_REPLICAS=$REGISTRY_REPLICAS"
 echo "================================================="
 
-echo "OCM install complete.  Deploying application."
+export RDS_INSTANCE
+export RDS_DB
+export RDS_USER
+export RDS_PASS
+export RDS_HOST
+export RDS_PORT
+
+echo "OCM install complete.  Creating RDS instance"
+
+exec ./create-rds.sh
+
+echo "RDS instance created.  Deploying application."
 
 exec ./deploy.sh
