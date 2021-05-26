@@ -27,13 +27,13 @@ while [ "x$TEST_ITERATIONS" = "x" ]
 do
   read -p "Iterations: " TEST_ITERATIONS
 done
-while [ "x$TEST_USERS" = "x" ]
-do
-  read -p "Number of Test Users: " TEST_USERS
-done
 while [ "x$TEST_RAMP_TIME" = "x" ]
 do
   read -p "Ramp up Time (seconds): " TEST_RAMP_TIME
+done
+while [ "x$TEST_USERS" = "x" ]
+do
+  read -p "Number of Test Users: " TEST_USERS
 done
 while [ "x$TEST_WORKERS" = "x" ]
 do

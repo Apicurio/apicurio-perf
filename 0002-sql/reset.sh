@@ -15,7 +15,9 @@ OCM_API=https://api.stage.openshift.com
 
 while [ "x$CLUSTER_ID" = "x" ]
 do
-  read -p "OCM Cluster ID: " CLUSTER_ID
+  read -p "OCM App Cluster Name: " CLUSTER_NAME
+  CLUSTER_ID=`ocm get "$OCM_API/api/clusters_mgmt/v1/clusters" | jq -r "(.items[] | select(.name | contains(\"$CLUSTER_NAME\"))).id"`
+  [[ $CLUSTER_ID =~ ^null$ ]] && CLUSTER_ID=""
 done
 while [ "x$PROJECT_NAME" = "x" ]
 do
