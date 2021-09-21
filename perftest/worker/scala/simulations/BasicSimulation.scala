@@ -8,38 +8,38 @@ import scala.concurrent.duration._
 
 class BasicSimulation extends Simulation {
 
-  val registryUrl = scala.util.Properties.envOrElse("REGISTRY_URL", "http://localhost:8080/apis/registry/v1")
-  val users = scala.util.Properties.envOrElse("TEST_USERS", "10").toInt
-  val ramp = scala.util.Properties.envOrElse("TEST_RAMP_TIME", "30").toInt
-  
+  val tokenUrl = scala.util.Properties.envOrElse("TOKEN_URL", "")
+  val clientId = scala.util.Properties.envOrElse("CLIENT_ID", "")
+  val clientSecret = scala.util.Properties.envOrElse("CLIENT_SECRET", "")
+
+  val registryUrl = scala.util.Properties.envOrElse("REGISTRY_URL", "http://localhost:8080/apis/registry/v2")
+  val users = scala.util.Properties.envOrElse("TEST_USERS", "1").toInt
+  val ramp = scala.util.Properties.envOrElse("TEST_RAMP_TIME", "5").toInt
 
   val httpProtocol = http
-    .baseUrl(registryUrl)
-    .acceptHeader("text/html,application/xhtml+xml,application/json,application/xml;q=0.9,*/*;q=0.8") // Here are the common headers
-    .acceptEncodingHeader("gzip, deflate")
-    .acceptLanguageHeader("en-US,en;q=0.5")
+    .acceptHeader("*/*")
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0")
 
-  val scn = scenario("Smoke Test") // A scenario is a chain of requests and pauses
-    .exec(http("list_artifacts")
-      .get("/artifacts")
-    )
-    .pause(1)
-    .exec(http("create_artifact")
-      .post("/artifacts")
-      .body(StringBody("{ \"openapi\": \"3.0.2\" }"))
-      .check(jsonPath("$.id").saveAs("artifactId"))
-      .check(jsonPath("$.globalId").saveAs("globalId"))
-    )
-    .pause(1)
-    .exec(http("get_latest_version")
-      .get("/artifacts/${artifactId}")
-    )
-    .pause(1)
-    .exec(http("get_globalId")
-      .get("/ids/${globalId}")
+  val authHeaders = Map(
+    "Authorization" -> "Bearer ${access_token}"
+  );
+
+  val scn = scenario("Smoke Test")
+    // 1. Get an access token from the IDP
+    .exec(http("Get access token")
+      .post(tokenUrl)
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .body(StringBody(s"grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}"))
+      .asJson
+      .check(status.is(200))
+      .check(jsonPath("$.access_token").saveAs("access_token"))
     )
 
+    // 2. Do the smoke test (authenticated using the access token from (1) above)
+    .exec(http("Search artifacts")
+      .get(registryUrl + "/search/artifacts")
+      .headers(authHeaders)
+    )
   setUp(
       scn.inject(rampUsers(users) during (ramp seconds))
   ).protocols(httpProtocol)

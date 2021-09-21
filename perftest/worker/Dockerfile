@@ -5,7 +5,12 @@ ENV GATLING_VERSION 3.5.1
 
 # set environment variables
 ENV GATLING_HOME /apps/gatling
-ENV REGISTRY_URL http://127.0.0.1:8080/apis/registry/v1
+ENV REGISTRY_URL http://127.0.0.1:8080/apis/registry/v2
+
+ENV TOKEN_URL https://identity.api.stage.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
+ENV CLIENT_ID not-provided
+ENV CLIENT_SECRET not-provided
+
 ENV TEST_SIMULATION BasicSimulation
 ENV TEST_USERS 10
 ENV TEST_RAMP_TIME 30
