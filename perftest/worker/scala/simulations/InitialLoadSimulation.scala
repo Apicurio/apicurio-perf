@@ -7,17 +7,22 @@ import scala.concurrent.duration._
 
 class InitialLoadSimulation extends Simulation {
 
+  val tokenUrl = scala.util.Properties.envOrElse("TOKEN_URL", "")
+  val clientId = scala.util.Properties.envOrElse("CLIENT_ID", "")
+  val clientSecret = scala.util.Properties.envOrElse("CLIENT_SECRET", "")
+
   val registryUrl = scala.util.Properties.envOrElse("REGISTRY_URL", "http://localhost:8080/apis/registry/v2")
   val users = scala.util.Properties.envOrElse("TEST_USERS", "100").toInt
   val ramp = scala.util.Properties.envOrElse("TEST_RAMP_TIME", "60").toInt
 
   val httpProtocol = http
-    .baseUrl(registryUrl)
-    .acceptHeader("text/html,application/xhtml+xml,application/json,application/xml;q=0.9,*/*;q=0.8") // Here are the common headers
-    .acceptEncodingHeader("gzip, deflate")
-    .acceptLanguageHeader("en-US,en;q=0.5")
+    .acceptHeader("*/*")
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0")
-    
+
+  val authHeaders = Map(
+    "Authorization" -> "Bearer ${access_token}"
+  );
+
   val counter = new java.util.concurrent.atomic.AtomicInteger(2)
 
   val scn = scenario("Initial Load Test") // A scenario is a chain of requests and pauses

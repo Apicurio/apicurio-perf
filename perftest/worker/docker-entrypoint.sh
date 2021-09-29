@@ -3,10 +3,16 @@
 export PATH
 export GATLING_HOME
 export REGISTRY_URL
+export FLEET_MANAGER_URL
+
+export OCM_URL
+export OFFLINE_TOKEN
 
 export TOKEN_URL
-export CLIENT_ID
-export CLIENT_SECRET
+export ADMIN_CLIENT_ID
+export ADMIN_CLIENT_SECRET
+export DEV_CLIENT_ID
+export DEV_CLIENT_SECRET
 
 export TEST_SIMULATION
 export TEST_USERS
@@ -22,9 +28,14 @@ echo "---"
 echo "PATH: $PATH"
 echo "GATLING_HOME: $GATLING_HOME"
 echo "TOKEN_URL: $TOKEN_URL"
-echo "CLIENT_ID: $CLIENT_ID"
-echo "CLIENT_SECRET: xxxxxxxx"
+echo "ADMIN_CLIENT_ID: $ADMIN_CLIENT_ID"
+echo "ADMIN_CLIENT_SECRET: xxxxxxxx"
+echo "DEV_CLIENT_ID: $DEV_CLIENT_ID"
+echo "DEV_CLIENT_SECRET: xxxxxxxx"
 echo "REGISTRY_URL: $REGISTRY_URL"
+echo "OCM_URL: $OCM_URL"
+echo "OFFLINE_TOKEN: $OFFLINE_TOKEN"
+echo "FLEET_MANAGER_URL: $FLEET_MANAGER_URL"
 echo "TEST_SIMULATION: $TEST_SIMULATION"
 echo "TEST_USERS: $TEST_USERS"
 echo "TEST_RAMP_TIME: $TEST_RAMP_TIME"
@@ -35,6 +46,11 @@ echo "TEST_AGGREGATOR_PORT: $TEST_AGGREGATOR_PORT"
 echo "-------------------------------------------------------------------------"
 
 UUID=`cat /proc/sys/kernel/random/uuid`
+
+echo "-------------------------------------------------------------------------"
+/apps/bin/ocm login --url=staging --token=$OFFLINE_TOKEN
+/apps/bin/ocm whoami
+echo "-------------------------------------------------------------------------"
 
 # Report that the worker has started (report to aggregator).
 if [ "x$TEST_REPORT_RESULTS" = "xtrue" ]

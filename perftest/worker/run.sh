@@ -36,15 +36,38 @@ while [ "xTOKEN_URL" = "x" ]
 do
   export TOKEN_URL=https://identity.api.stage.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
 done
-while [ "xCLIENT_ID" = "x" ]
+while [ "xADMIN_CLIENT_ID" = "x" ]
 do
-  export CLIENT_ID=
+  export ADMIN_CLIENT_ID=
 done
-while [ "xCLIENT_SECRET" = "x" ]
+while [ "xADMIN_CLIENT_SECRET" = "x" ]
 do
-  export CLIENT_SECRET=
+  export ADMIN_CLIENT_SECRET=
+done
+while [ "xDEV_CLIENT_ID" = "x" ]
+do
+  export DEV_CLIENT_ID=
+done
+while [ "xDEV_CLIENT_SECRET" = "x" ]
+do
+  export DEV_CLIENT_SECRET=
+done
+while [ "xFLEET_MANAGER_URL" = "x" ]
+do
+  export FLEET_MANAGER_URL=https://api.stage.openshift.com/api/serviceregistry_mgmt
+done
+while [ "xOCM_URL" = "x" ]
+do
+  export OCM_URL=staging
+done
+while [ "xOFFLINE_TOKEN" = "x" ]
+do
+  export OFFLINE_TOKEN=none
 done
 
+
+
+# Custom docker command (useful for windows where the command should be "winpty docker" instead of just "docker")
 while [ "xDOCKER_CMD" = "x" ]
 do
   export DOCKER_CMD=docker
@@ -53,9 +76,14 @@ done
 
 $DOCKER_CMD run --network="host" -it \
     -e REGISTRY_URL=$REGISTRY_URL \
+    -e OCM_URL=$OCM_URL \
+    -e OFFLINE_TOKEN=$OFFLINE_TOKEN \
     -e TOKEN_URL=$TOKEN_URL \
-    -e CLIENT_ID=$CLIENT_ID \
-    -e CLIENT_SECRET=$CLIENT_SECRET \
+    -e ADMIN_CLIENT_ID=$ADMIN_CLIENT_ID \
+    -e ADMIN_CLIENT_SECRET=$ADMIN_CLIENT_SECRET \
+    -e DEV_CLIENT_ID=$DEV_CLIENT_ID \
+    -e DEV_CLIENT_SECRET=$DEV_CLIENT_SECRET \
+    -e FLEET_MANAGER_URL=$FLEET_MANAGER_URL \
     -e TEST_USERS=$TEST_USERS \
     -e TEST_ITERATIONS=$TEST_ITERATIONS \
     -e TEST_RAMP_TIME=$TEST_RAMP_TIME \

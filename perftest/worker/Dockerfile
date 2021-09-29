@@ -3,13 +3,25 @@ FROM centos:8
 # gatling version
 ENV GATLING_VERSION 3.5.1
 
+# token refresh version
+ENV TOKEN_REFRESH_VERSION 1.0
+
 # set environment variables
 ENV GATLING_HOME /apps/gatling
-ENV REGISTRY_URL http://127.0.0.1:8080/apis/registry/v2
+
+ENV OCM_PATH /apps/bin/ocm
+ENV OCM_URL staging
+ENV OFFLINE_TOKEN not-provided
 
 ENV TOKEN_URL https://identity.api.stage.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
-ENV CLIENT_ID not-provided
-ENV CLIENT_SECRET not-provided
+ENV ADMIN_CLIENT_ID not-provided
+ENV ADMIN_CLIENT_SECRET not-provided
+
+ENV DEV_CLIENT_ID not-provided
+ENV DEV_CLIENT_SECRET not-provided
+
+ENV FLEET_MANAGER_URL https://api.stage.openshift.com/api/serviceregistry_mgmt
+ENV REGISTRY_URL http://127.0.0.1:8080/apis/registry/v2
 
 ENV TEST_SIMULATION BasicSimulation
 ENV TEST_USERS 10
@@ -37,12 +49,21 @@ RUN mkdir -p $GATLING_HOME && \
     mv /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /apps/gatling/ && \
     mkdir -p /apps/bin
 
+# Install ocm
+RUN curl -Lso /apps/bin/ocm https://github.com/openshift-online/ocm-cli/releases/download/v0.1.42/ocm-linux-amd64 && \
+    chmod +x /apps/bin/ocm
+
+
 # change context to gatling directory
 WORKDIR  /opt/gatling
 
 # add simulations to the docker image
 ADD --chown=worker scala /apps/gatling/simulations
 ADD --chown=worker docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
+ADD --chown=worker token-refresh/target/apicurio-perf-token-refresh-$TOKEN_REFRESH_VERSION.jar /apps/gatling/lib
+ADD --chown=worker token-refresh/target/lib /apps/gatling/lib
+ADD --chown=worker conf /apps/gatling/conf
+
 RUN chown -R worker /apps && chmod -R 777 /apps
 
 # run the test
