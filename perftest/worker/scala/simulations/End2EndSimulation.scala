@@ -33,37 +33,47 @@ class End2EndSimulation extends Simulation {
   val ramp = scala.util.Properties.envOrElse("TEST_RAMP_TIME", "1").toInt
   val iterations = scala.util.Properties.envOrElse("TEST_ITERATIONS", "5").toInt
 
+
+  // Some useful variables.
+  val rando = new java.security.SecureRandom()
+  val counter = new AtomicInteger()
+
+
   // HTTP protocol and auth header setup
   val httpProtocol = http
     .acceptHeader("*/*")
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0")
+
   val fleetManagerAuthHeaders = Map(
-    "Authorization" -> s"Bearer ${TokenRefresh.getFleetManagerToken(ocmPath, ocmUrl, offlineToken)}"
-  );
+    "Authorization" -> "Bearer ${fm_auth_token}"
+  )
   val adminUserAuthHeaders = Map(
-    "Authorization" -> s"Bearer ${TokenRefresh.getSsoToken(tokenUrl, adminClientId, adminClientSecret)}"
-  );
+    "Authorization" -> "Bearer ${admin_auth_token}"
+  )
   val devUserAuthHeaders = Map(
-    "Authorization" -> s"Bearer ${TokenRefresh.getSsoToken(tokenUrl, devClientId, devClientSecret)}"
-  );
+    "Authorization" -> "Bearer ${dev_auth_token}"
+  )
 
-  val rando = new java.security.SecureRandom()
-  val counter = new AtomicInteger()
 
+  // Now create the scenario
   val scn = scenario("E2E Service Registry Simulation")
 
     // Create a new instance of Service Registry (by calling the fleet-manager API)
     ///////////////////////////////////////////////////////////////////////////////
+    .exec(session => session.set("registry_idx", "" + (counter.incrementAndGet)))
+    .exec(session => session.set("fm_auth_token", TokenRefresh.getFleetManagerToken(ocmPath, ocmUrl, offlineToken)))
     .exec(http("Create registry instance")
       .post(fleetManagerUrl + "/v1/registries")
       .header("Content-Type", "application/json")
       .headers(fleetManagerAuthHeaders)
-      .body(StringBody(s"""
-        {
-          "name": "perf-test-registry-${counter.incrementAndGet}",
-          "description": "This instance is for performance testing!"
-        }
-      """))
+      .body(
+        StringBody("""
+            {
+              "name": "perf-test-registry-${registry_idx}",
+              "description": "This instance is for performance testing!"
+            }
+          """)
+      )
       .asJson
       .check(status.is(200))
       .check(jsonPath("$.id").saveAs("instance_id"))
@@ -95,6 +105,7 @@ class End2EndSimulation extends Simulation {
 
     // Determine the principalId of the Registry API service account
     ////////////////////////////////////////////////////////////////
+    .exec(session => session.set("dev_auth_token", TokenRefresh.getSsoToken(tokenUrl, devClientId, devClientSecret)))
     .exec(http("Get Developer principalId")
       .get("${instance_url}/apis/registry/v2/users/me")
       .headers(devUserAuthHeaders)
@@ -105,6 +116,7 @@ class End2EndSimulation extends Simulation {
 
     // Use access token from Admin user/svc account to grant Developer role to Registry API service account
     ////////////////////////////////////////////////////////////////////////////////////
+    .exec(session => session.set("admin_auth_token", TokenRefresh.getSsoToken(tokenUrl, adminClientId, adminClientSecret)))
     .exec(http("Grant access to Developer principalId")
       .post("${instance_url}/apis/registry/v2/admin/roleMappings")
       .headers(adminUserAuthHeaders)
@@ -143,7 +155,8 @@ class End2EndSimulation extends Simulation {
     // Fetch artifact created above N times
     ////////////////////////////////////////
     .repeat(iterations)(
-        exec(http("Get artifact by ID")
+        exec(session => session.set("dev_auth_token", TokenRefresh.getSsoToken(tokenUrl, devClientId, devClientSecret)))
+        .exec(http("Get artifact by ID")
           .get("${instance_url}/apis/registry/v2/ids/globalIds/${globalId}")
           .headers(devUserAuthHeaders)
         )
@@ -152,6 +165,7 @@ class End2EndSimulation extends Simulation {
 
     // Delete the registry instance
     ///////////////////////////////
+    .exec(session => session.set("fm_auth_token", TokenRefresh.getFleetManagerToken(ocmPath, ocmUrl, offlineToken)))
     .exec(http("Delete registry instance")
       .delete(fleetManagerUrl + "/v1/registries/${instance_id}")
       .headers(fleetManagerAuthHeaders)

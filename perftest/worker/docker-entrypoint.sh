@@ -62,7 +62,10 @@ fi
 
 # Run the Gatling test
 cd /apps/gatling
-./bin/gatling.sh -nr -sf /apps/gatling/simulations -s simulations.$TEST_SIMULATION
+./bin/gatling.sh -sf /apps/gatling/simulations -s simulations.$TEST_SIMULATION
+
+# Version that doesn't generate a report (simulation.log file only):
+# ./bin/gatling.sh -nr -sf /apps/gatling/simulations -s simulations.$TEST_SIMULATION
 
 echo "Test complete"
 
