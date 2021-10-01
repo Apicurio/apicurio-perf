@@ -7,23 +7,12 @@ import scala.concurrent.duration._
 import io.apicurio.perf.refresh.TokenRefresh
 import java.util.concurrent.atomic.AtomicInteger
 
-class End2EndSimulation extends Simulation {
+class BasicControlPlaneSimulation extends Simulation {
 
   // Offline token used to acquire a JWT suitable for interacting with srs-fleet-manager API
   val ocmPath = scala.util.Properties.envOrElse("OCM_PATH", "ocm")
   val ocmUrl = scala.util.Properties.envOrElse("OCM_URL", "staging")
   val offlineToken = scala.util.Properties.envOrElse("OFFLINE_TOKEN", "")
-
-  // Token URL for MAS-SSO
-  val tokenUrl = scala.util.Properties.envOrElse("TOKEN_URL", "")
-
-  // Credentials for PerfTest service account (registry instance Admin user)
-  val adminClientId = scala.util.Properties.envOrElse("ADMIN_CLIENT_ID", "")
-  val adminClientSecret = scala.util.Properties.envOrElse("ADMIN_CLIENT_SECRET", "")
-
-  // Credentials for Standard service account (registry instance Dev user)
-  val devClientId = scala.util.Properties.envOrElse("DEV_CLIENT_ID", "")
-  val devClientSecret = scala.util.Properties.envOrElse("DEV_CLIENT_SECRET", "")
 
   // Fleet manager API
   val fleetManagerUrl = scala.util.Properties.envOrElse("FLEET_MANAGER_URL", "https://api.stage.openshift.com/api/serviceregistry_mgmt")
@@ -40,13 +29,6 @@ class End2EndSimulation extends Simulation {
   val fleetManagerAuthHeaders = Map(
     "Authorization" -> s"Bearer ${TokenRefresh.getFleetManagerToken(ocmPath, ocmUrl, offlineToken)}"
   );
-  val adminUserAuthHeaders = Map(
-    "Authorization" -> s"Bearer ${TokenRefresh.getSsoToken(tokenUrl, adminClientId, adminClientSecret)}"
-  );
-  val devUserAuthHeaders = Map(
-    "Authorization" -> s"Bearer ${TokenRefresh.getSsoToken(tokenUrl, devClientId, devClientSecret)}"
-  );
-
   val rando = new java.security.SecureRandom()
   val counter = new AtomicInteger()
 
@@ -91,63 +73,6 @@ class End2EndSimulation extends Simulation {
       .asJson
       .check(status.is(200))
       .check(jsonPath("$.registryUrl").saveAs("instance_url"))
-    )
-
-    // Determine the principalId of the Registry API service account
-    ////////////////////////////////////////////////////////////////
-    .exec(http("Get Developer principalId")
-      .get("${instance_url}/apis/registry/v2/users/me")
-      .headers(devUserAuthHeaders)
-      .asJson
-      .check(status.is(200))
-      .check(jsonPath("$.username").saveAs("dev_principal_id"))
-    )
-
-    // Use access token from Admin user/svc account to grant Developer role to Registry API service account
-    ////////////////////////////////////////////////////////////////////////////////////
-    .exec(http("Grant access to Developer principalId")
-      .post("${instance_url}/apis/registry/v2/admin/roleMappings")
-      .headers(adminUserAuthHeaders)
-      .body(StringBody("""
-        {
-          "principalId": "${dev_principal_id}",
-          "role": "DEVELOPER"
-        }
-      """))
-      .asJson
-      .check(status.is(204))
-    )
-
-    // Create artifact in registry instance
-    ///////////////////////////////////////
-    .exec(session => session.set("idx", "" + (rando.nextInt(users * 2) + 100)))
-    .exec(http("Create artifact")
-        .post("${instance_url}/apis/registry/v2/groups/default/artifacts")
-        .headers(devUserAuthHeaders)
-        .header("X-Registry-ArtifactId", "End2EndSimulation-${idx}")
-        .queryParam("ifExists", "RETURN")
-        .body(StringBody("{ \"openapi\": \"3.0.2\", \"info\": { \"title\": \"Test Artifact ${idx}\"  } }"))
-        .check(jsonPath("$.globalId").saveAs("globalId"))
-        .check(jsonPath("$.contentId").saveAs("contentId"))
-        .check(jsonPath("$.id").saveAs("artifactId"))
-    )
-
-    // Search for artifacts in registry instance
-    ////////////////////////////////////////////
-    .exec(http("Search artifacts")
-        .get("${instance_url}/apis/registry/v2/search/artifacts")
-        .headers(devUserAuthHeaders)
-        .check(status.is(200))
-    )
-
-    // Fetch artifact created above N times
-    ////////////////////////////////////////
-    .repeat(iterations)(
-        exec(http("Get artifact by ID")
-          .get("${instance_url}/apis/registry/v2/ids/globalIds/${globalId}")
-          .headers(devUserAuthHeaders)
-        )
-        .pause(500 milliseconds)
     )
 
     // Delete the registry instance

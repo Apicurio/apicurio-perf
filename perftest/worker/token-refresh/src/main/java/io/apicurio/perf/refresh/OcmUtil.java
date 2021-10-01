@@ -17,24 +17,14 @@
 package io.apicurio.perf.refresh;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Date;
-import java.util.Map;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author eric.wittmann@gmail.com
  */
 public class OcmUtil {
-
-    private static final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * @param ocmPath
@@ -62,31 +52,12 @@ public class OcmUtil {
 
             Token token = new Token();
             token.setJwt(jwt);
-            token.setExpiresOn(extractExpiration(jwt));
+            token.setExpiresOn(JwtUtil.extractExpiration(jwt));
             return token;
         } catch (Exception e) {
             String error = outputHandler.getOutput();
             throw new RuntimeException(error, e);
         }
-    }
-
-    /**
-     * @param jwt
-     * @return
-     * @throws JsonMappingException
-     * @throws JsonProcessingException
-     */
-    private static Date extractExpiration(String jwt) throws JsonMappingException, JsonProcessingException {
-        String[] split = jwt.split("\\.");
-        String payload = split[1];
-        String payloadJson = new String(Base64.getUrlDecoder().decode(payload), StandardCharsets.UTF_8);
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> payloadMap = mapper.readValue(payloadJson, Map.class);
-        Number number = (Number) payloadMap.get("exp");
-        long millis = number.longValue() * 1000L;
-
-        return new Date(millis);
     }
 
 }

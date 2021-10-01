@@ -6,26 +6,36 @@ import java.util.Map;
 
 public class TokenRefresh {
 
-    private static Map<String, Token> cache = new HashMap<>();
+    private static Map<String, Token> tokenCache = new HashMap<>();
 
     public static synchronized String getFleetManagerToken(String ocmPath, String ocmUrl, String offlineToken) {
-        System.out.println("---");
-        System.out.println("Getting fleet manager token...");
-        System.out.println(" OCM_PATH: " + ocmPath);
-        System.out.println(" OCM_URL:  " + ocmUrl);
-        System.out.println(" OFFLINE_TOKEN: " + offlineToken.substring(0, 8) + "..." + offlineToken.substring(offlineToken.length() - 8));
-        System.out.println("---");
-        Token token = cache.get(offlineToken);
+        String tokenKey = "ocm:" + ocmUrl + "#" + offlineToken;
+        Token token = tokenCache.get(tokenKey);
 
         if (token == null || hasExpired(token)) {
             token = OcmUtil.getToken(ocmPath, ocmUrl, offlineToken);
-            cache.put(offlineToken, token);
+            tokenCache.put(tokenKey, token);
+
+            String jwt = token.getJwt();
+            System.out.println("Fleet manager token refreshed: " + jwt.substring(0, 8) + "..." + jwt.substring(jwt.length() - 8));
         }
 
-        String jwt = token.getJwt();
-        System.out.println("Fleet manager token acquired: " + jwt.substring(0, 8) + "..." + jwt.substring(jwt.length() - 8));
+        return token.getJwt();
+    }
 
-        return jwt;
+    public static synchronized String getSsoToken(String tokenUrl, String clientId, String clientSecret) {
+        String tokenKey = "sso:" + tokenUrl + "#" + clientId;
+        Token token = tokenCache.get(tokenKey);
+
+        if (token == null || hasExpired(token)) {
+            token = SsoUtil.getToken(tokenUrl, clientId, clientSecret);
+            tokenCache.put(tokenKey, token);
+
+            String jwt = token.getJwt();
+            System.out.println("SSO token refreshed: " + jwt.substring(0, 8) + "..." + jwt.substring(jwt.length() - 8));
+        }
+
+        return token.getJwt();
     }
 
     private static boolean hasExpired(Token token) {

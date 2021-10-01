@@ -53,7 +53,7 @@ class KafkaAppSimulation extends Simulation {
         .check(jsonPath("$.id").saveAs("artifactId"))
     )
 
-    // 4. Fetch the artifact a bunch of times
+    // 4. Fetch the artifact a bunch of times4
     .repeat(iterations)(
         exec(http("Get artifact by ID")
           .get(registryUrl + "/ids/globalIds/${globalId}")

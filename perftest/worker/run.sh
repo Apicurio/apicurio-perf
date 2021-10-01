@@ -2,7 +2,7 @@
 
 while [ "x$TEST_SIMULATION" = "x" ]
 do
-  export TEST_SIMULATION=BasicSimulation
+  export TEST_SIMULATION=End2EndSimulation
 done
 while [ "x$REGISTRY_URL" = "x" ]
 do
