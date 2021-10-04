@@ -64,7 +64,22 @@ while [ "xOFFLINE_TOKEN" = "x" ]
 do
   export OFFLINE_TOKEN=none
 done
-
+while [ "xTEST_RESULTS_GITHUB_REPO" = "x" ]
+do
+  export TEST_RESULTS_GITHUB_REPO=apicurio-perf-results
+done
+while [ "xTEST_RESULTS_GITHUB_USER" = "x" ]
+do
+  export TEST_RESULTS_GITHUB_USER=apicurio-ci
+done
+while [ "xTEST_RESULTS_GITHUB_EMAIL" = "x" ]
+do
+  export TEST_RESULTS_GITHUB_EMAIL=apicurio.ci@gmail.com
+done
+while [ "xTEST_RESULTS_GITHUB_PASS" = "x" ]
+do
+  export TEST_RESULTS_GITHUB_PASS=none
+done
 
 
 # Custom docker command (useful for windows where the command should be "winpty docker" instead of just "docker")
@@ -91,4 +106,8 @@ $DOCKER_CMD run --network="host" -it \
     -e TEST_AGGREGATOR_HOST=$TEST_AGGREGATOR_HOST \
     -e TEST_AGGREGATOR_PORT=$TEST_AGGREGATOR_PORT \
     -e TEST_SIMULATION=$TEST_SIMULATION \
+    -e TEST_RESULTS_GITHUB_REPO=$TEST_RESULTS_GITHUB_REPO \
+    -e TEST_RESULTS_GITHUB_USER=$TEST_RESULTS_GITHUB_USER \
+    -e TEST_RESULTS_GITHUB_EMAIL=$TEST_RESULTS_GITHUB_EMAIL \
+    -e TEST_RESULTS_GITHUB_PASS=$TEST_RESULTS_GITHUB_PASS \
     apicurio/apicurio-perftest-worker:latest

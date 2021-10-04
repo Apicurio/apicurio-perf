@@ -13,7 +13,7 @@ public class TokenRefresh {
         Token token = tokenCache.get(tokenKey);
 
         if (token == null || hasExpired(token)) {
-            token = OcmUtil.getToken(ocmPath, ocmUrl, offlineToken);
+            token = OcmUtil.getToken(ocmPath, ocmUrl, offlineToken, false);
             tokenCache.put(tokenKey, token);
 
             String jwt = token.getJwt();
@@ -39,8 +39,8 @@ public class TokenRefresh {
     }
 
     private static boolean hasExpired(Token token) {
-        // Give a 10s grace period for the token
-        return token.getExpiresOn().before(new Date(System.currentTimeMillis() - (10 * 1000)));
+        // Give a 30s grace period for the token
+        return token.getExpiresOn().before(new Date(System.currentTimeMillis() - (30 * 1000)));
     }
 
 

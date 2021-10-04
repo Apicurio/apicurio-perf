@@ -7,7 +7,7 @@ public class TestOcmUtil {
         if (offlineToken == null) {
             throw new RuntimeException("Required ENV var missing: OFFLINE_TOKEN");
         }
-        Token token = OcmUtil.getToken("ocm", "staging", offlineToken);
+        Token token = OcmUtil.getToken("ocm", "staging", offlineToken, true);
         System.out.println("Token: " + token.getJwt());
         System.out.println("Expires: " + token.getExpiresOn());
     }

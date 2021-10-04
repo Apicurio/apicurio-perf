@@ -31,16 +31,21 @@ public class OcmUtil {
      * @param ocmUrl
      * @param offlineToken
      */
-    public static Token getToken(String ocmPath, String ocmUrl, String offlineToken) {
+    public static Token getToken(String ocmPath, String ocmUrl, String offlineToken, boolean loginFirst) {
         ExecutorOutputHandler outputHandler = new ExecutorOutputHandler();
         try {
-            // Login first.
-            String cmd = ocmPath + " login --url=OCM_URL --token=\"TOKEN\"".replace("OCM_URL", ocmUrl).replace("TOKEN", offlineToken);
-
-            CommandLine cmdLine = CommandLine.parse(cmd);
+            String cmd;
+            CommandLine cmdLine;
             DefaultExecutor executor = new DefaultExecutor();
-            executor.setWorkingDirectory(new File("/apps/bin"));
-            executor.execute(cmdLine);
+
+            if (loginFirst) {
+                // Login first.
+                cmd = ocmPath + " login --url=OCM_URL --token=\"TOKEN\"".replace("OCM_URL", ocmUrl).replace("TOKEN", offlineToken);
+
+                cmdLine = CommandLine.parse(cmd);
+                executor.setWorkingDirectory(new File("/apps/bin"));
+                executor.execute(cmdLine);
+            }
 
             // If that worked, get the token!
             cmd = ocmPath + " token";

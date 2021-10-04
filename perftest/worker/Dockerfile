@@ -30,9 +30,15 @@ ENV TEST_REPORT_RESULTS false
 ENV TEST_AGGREGATOR_HOST none
 ENV TEST_AGGREGATOR_PORT 80
 
+ENV TEST_RESULTS_GITHUB_REPO apicurio-perf-results
+ENV TEST_RESULTS_GITHUB_USER apicurio-ci
+ENV TEST_RESULTS_GITHUB_EMAIL apicurio.ci@gmail.com
+ENV TEST_RESULTS_GITHUB_PASS not-provided
+
+
 RUN yum install -y epel-release && \
     yum update -y && \
-    yum install -y curl wget unzip zip && \
+    yum install -y curl wget unzip zip git && \
     yum install -y java-11-openjdk-devel && \
     useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 worker)" worker && \
     mkdir -p /apps && chown worker /apps
