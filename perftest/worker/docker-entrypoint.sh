@@ -80,8 +80,10 @@ echo "Test complete"
 
 
 # Push the results to github
-if [ "xTEST_RESULTS_GITHUB_REPO" != "x" ]
+if [[ -z $TEST_RESULTS_GITHUB_REPO ]] ;
 then
+  echo "Skipping pushing results via git"
+else
   echo "Pushing results to $TEST_RESULTS_GITHUB_REPO"
   mkdir -p /tmp/gitwork
   cd /tmp/gitwork
@@ -111,7 +113,7 @@ then
   cp -rf $RESULTS_DIR/* .
 
   git add .
-  git commit -m 'Publishing perf-test results for $TEST_SIMULATION run.'
+  git commit -m 'Publishing perf-test results for '"$TEST_SIMULATION"' run.'
   git push origin main
 
   git status
