@@ -1,92 +1,75 @@
 #!/bin/sh
 
-while [ "x$TEST_SIMULATION" = "x" ]
-do
+if [[ -z $TEST_SIMULATION ]] ; then
   export TEST_SIMULATION=End2EndSimulation
-done
-while [ "x$REGISTRY_URL" = "x" ]
-do
-  export REGISTRY_URL=http://127.0.0.1:9090/apis/registry/v2
-done
-while [ "xTEST_RAMP_TIME" = "x" ]
-do
+fi
+if [[ -z $TEST_RAMP_TIME ]] ; then
   export TEST_RAMP_TIME=5
-done
-while [ "xTEST_USERS" = "x" ]
-do
+fi
+if [[ -z $TEST_USERS ]] ; then
   export TEST_USERS=1
-done
-while [ "xTEST_ITERATIONS" = "x" ]
-do
+fi
+if [[ -z $TEST_ITERATIONS ]] ; then
   export TEST_ITERATIONS=1
-done
-while [ "xTEST_REPORT_RESULTS" = "x" ]
-do
-  export TEST_REPORT_RESULTS=true
-done
-while [ "xTEST_AGGREGATOR_HOST" = "x" ]
-do
-  export TEST_AGGREGATOR_HOST=localhost
-done
-while [ "xTEST_AGGREGATOR_PORT" = "x" ]
-do
-  export TEST_AGGREGATOR_PORT=5080
-done
-while [ "xTOKEN_URL" = "x" ]
-do
-  export TOKEN_URL=https://identity.api.stage.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
-done
-while [ "xADMIN_CLIENT_ID" = "x" ]
-do
-  export ADMIN_CLIENT_ID=
-done
-while [ "xADMIN_CLIENT_SECRET" = "x" ]
-do
-  export ADMIN_CLIENT_SECRET=
-done
-while [ "xDEV_CLIENT_ID" = "x" ]
-do
-  export DEV_CLIENT_ID=
-done
-while [ "xDEV_CLIENT_SECRET" = "x" ]
-do
-  export DEV_CLIENT_SECRET=
-done
-while [ "xFLEET_MANAGER_URL" = "x" ]
-do
+fi
+
+# only required for some simulations, e2e simulation does not require this env var
+if [[ -z $REGISTRY_URL ]] ; then
+  export REGISTRY_URL=http://127.0.0.1:9090/apis/registry/v2
+fi
+if [[ -z $FLEET_MANAGER_URL ]] ; then
   export FLEET_MANAGER_URL=https://api.stage.openshift.com/api/serviceregistry_mgmt
-done
-while [ "xOCM_URL" = "x" ]
-do
+fi
+if [[ -z $TOKEN_URL ]] ; then
+  export TOKEN_URL=https://identity.api.stage.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
+fi
+
+
+# optional env var TEST_REPORT_RESULTS
+if [[ -z $TEST_AGGREGATOR_HOST ]] ; then
+  export TEST_AGGREGATOR_HOST=localhost
+fi
+if [[ -z $TEST_AGGREGATOR_PORT ]] ; then
+  export TEST_AGGREGATOR_PORT=5080
+fi
+
+if [ "x$TEST_SIMULATION" = "xEnd2EndSimulation" ]
+then
+
+  if [[ -z $ADMIN_CLIENT_ID || \
+      -z $ADMIN_CLIENT_SECRET || \
+      -z $DEV_CLIENT_ID || \
+      -z $DEV_CLIENT_SECRET || \
+      -z $OFFLINE_TOKEN ]] ; then
+    echo "Required env vars not provided. Exiting...".
+    exit 1
+  fi
+
+fi
+
+if [[ -z $OCM_URL ]] ; then
   export OCM_URL=staging
-done
-while [ "xOFFLINE_TOKEN" = "x" ]
-do
+fi
+if [[ -z $OFFLINE_TOKEN ]] ; then
   export OFFLINE_TOKEN=none
-done
-while [ "xTEST_RESULTS_GITHUB_REPO" = "x" ]
-do
-  export TEST_RESULTS_GITHUB_REPO=apicurio-perf-results
-done
-while [ "xTEST_RESULTS_GITHUB_USER" = "x" ]
-do
+fi
+
+# optional env var TEST_RESULTS_GITHUB_REPO
+if [[ -z $TEST_RESULTS_GITHUB_USER ]] ; then
   export TEST_RESULTS_GITHUB_USER=apicurio-ci
-done
-while [ "xTEST_RESULTS_GITHUB_EMAIL" = "x" ]
-do
+fi
+if [[ -z $TEST_RESULTS_GITHUB_EMAIL ]] ; then
   export TEST_RESULTS_GITHUB_EMAIL=apicurio.ci@gmail.com
-done
-while [ "xTEST_RESULTS_GITHUB_PASS" = "x" ]
-do
+fi
+if [[ -z $TEST_RESULTS_GITHUB_PASS ]] ; then
   export TEST_RESULTS_GITHUB_PASS=none
-done
+fi
 
 
 # Custom docker command (useful for windows where the command should be "winpty docker" instead of just "docker")
-while [ "xDOCKER_CMD" = "x" ]
-do
+if [[ -z $DOCKER_CMD ]] ; then
   export DOCKER_CMD=docker
-done
+fi
 
 
 $DOCKER_CMD run --network="host" -it \
