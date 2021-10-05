@@ -39,8 +39,8 @@ public class TokenRefresh {
     }
 
     private static boolean hasExpired(Token token) {
-        // Give a 30s grace period for the token
-        return token.getExpiresOn().before(new Date(System.currentTimeMillis() - (30 * 1000)));
+        Date now = new Date();
+        return token.getExpiresOn().before(now);
     }
 
 
