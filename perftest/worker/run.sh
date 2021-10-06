@@ -72,7 +72,7 @@ if [[ -z $DOCKER_CMD ]] ; then
 fi
 
 
-$DOCKER_CMD run --network="host" -it \
+$DOCKER_CMD run --network="host" -i \
     -e REGISTRY_URL=$REGISTRY_URL \
     -e OCM_URL=$OCM_URL \
     -e OFFLINE_TOKEN=$OFFLINE_TOKEN \
