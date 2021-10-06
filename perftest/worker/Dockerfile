@@ -43,6 +43,13 @@ RUN yum install -y epel-release && \
     useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 worker)" worker && \
     mkdir -p /apps && chown worker /apps
 
+# Install maven
+RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
+  && curl -fsSL -o /tmp/apache-maven.tar.gz https://apache.osuosl.org/maven/maven-3/3.8.3/binaries/apache-maven-3.8.3-bin.tar.gz \
+  && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
+  && rm -f /tmp/apache-maven.tar.gz \
+  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+
 USER worker
 
 # Install Gatling
@@ -59,6 +66,13 @@ RUN mkdir -p $GATLING_HOME && \
 RUN curl -Lso /apps/bin/ocm https://github.com/openshift-online/ocm-cli/releases/download/v0.1.42/ocm-linux-amd64 && \
     chmod +x /apps/bin/ocm
 
+# Setup token-refresh library
+RUN mvn --version && java -version
+ADD --chown=worker token-refresh /tmp/token-refresh
+WORKDIR /tmp/token-refresh
+RUN mvn clean install && \
+    mv /tmp/token-refresh/target/apicurio-perf-token-refresh-$TOKEN_REFRESH_VERSION.jar /apps/gatling/lib && \
+    mv /tmp/token-refresh/target/lib /apps/gatling/lib
 
 # change context to gatling directory
 WORKDIR  /opt/gatling
@@ -66,8 +80,6 @@ WORKDIR  /opt/gatling
 # add simulations to the docker image
 ADD --chown=worker scala /apps/gatling/simulations
 ADD --chown=worker docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
-ADD --chown=worker token-refresh/target/apicurio-perf-token-refresh-$TOKEN_REFRESH_VERSION.jar /apps/gatling/lib
-ADD --chown=worker token-refresh/target/lib /apps/gatling/lib
 ADD --chown=worker conf /apps/gatling/conf
 
 RUN chown -R worker /apps && chmod -R 777 /apps
