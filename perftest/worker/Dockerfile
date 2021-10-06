@@ -1,4 +1,4 @@
-FROM centos:8
+FROM quay.io/centos/centos:8
 
 # gatling version
 ENV GATLING_VERSION 3.5.1
