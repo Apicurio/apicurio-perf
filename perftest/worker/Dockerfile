@@ -70,9 +70,9 @@ RUN curl -Lso /apps/bin/ocm https://github.com/openshift-online/ocm-cli/releases
 RUN mvn --version && java -version
 ADD --chown=worker token-refresh /tmp/token-refresh
 WORKDIR /tmp/token-refresh
-RUN mvn clean install && \
-    mv /tmp/token-refresh/target/apicurio-perf-token-refresh-$TOKEN_REFRESH_VERSION.jar /apps/gatling/lib && \
-    mv /tmp/token-refresh/target/lib /apps/gatling/lib
+RUN mvn clean package
+RUN cp -r /tmp/token-refresh/target/apicurio-perf-token-refresh-$TOKEN_REFRESH_VERSION.jar /apps/gatling/lib
+RUN cp -r /tmp/token-refresh/target/lib/*.jar /apps/gatling/lib
 
 # change context to gatling directory
 WORKDIR  /opt/gatling
