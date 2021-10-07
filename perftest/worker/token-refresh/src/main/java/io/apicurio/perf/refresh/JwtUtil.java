@@ -29,8 +29,16 @@ public class JwtUtil {
         Number number = (Number) payloadMap.get("exp");
         long millis = number.longValue() * 1000L;
 
-        // Expire the token earlier than needed by 1 minute.
-        return new Date(millis - (60 * 1000));
+        System.err.println("---");
+        System.err.println("EXP: " + number);
+        System.err.println("EXP millis: " + millis);
+        System.err.println("EXP Date: " + new Date(millis));
+
+        // Expire the token earlier than needed by 30s.
+        Date adjExp = new Date(millis - (30 * 1000));
+        System.err.println("Adj Exp Date: " + adjExp);
+        System.err.println("---");
+        return adjExp;
     }
 
 }

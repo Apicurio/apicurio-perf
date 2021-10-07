@@ -31,7 +31,7 @@ public class TokenRefresh {
             tokenCache.put(tokenKey, token);
 
             String jwt = token.getJwt();
-            System.out.println("------------------\nSSO token refreshed: " + jwt.substring(0, 8) + "..." + jwt.substring(jwt.length() - 8));
+            System.out.println("SSO token refreshed: " + jwt.substring(0, 8) + "..." + jwt.substring(jwt.length() - 8));
         }
 
         return token.getJwt();
@@ -42,7 +42,7 @@ public class TokenRefresh {
         long expiresOn = token.getExpiresOn().getTime();
         long millisUntilExpiration = expiresOn - now;
 
-        System.err.println("Token expires in " + millisUntilExpiration + "ms");
+        System.err.println("Token expires in " + millisUntilExpiration + "ms (" + (millisUntilExpiration/1000) + " seconds) ["+(millisUntilExpiration/1000/60)+" minutes]");
 
         return millisUntilExpiration <= 0;
     }
