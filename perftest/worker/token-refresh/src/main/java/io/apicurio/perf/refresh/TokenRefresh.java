@@ -1,6 +1,5 @@
 package io.apicurio.perf.refresh;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,15 +31,20 @@ public class TokenRefresh {
             tokenCache.put(tokenKey, token);
 
             String jwt = token.getJwt();
-            System.out.println("SSO token refreshed: " + jwt.substring(0, 8) + "..." + jwt.substring(jwt.length() - 8));
+            System.out.println("------------------\nSSO token refreshed: " + jwt.substring(0, 8) + "..." + jwt.substring(jwt.length() - 8));
         }
 
         return token.getJwt();
     }
 
     private static boolean hasExpired(Token token) {
-        Date now = new Date();
-        return token.getExpiresOn().before(now);
+        long now = System.currentTimeMillis();
+        long expiresOn = token.getExpiresOn().getTime();
+        long millisUntilExpiration = expiresOn - now;
+
+        System.err.println("Token expires in " + millisUntilExpiration + "ms");
+
+        return millisUntilExpiration <= 0;
     }
 
 
