@@ -154,4 +154,5 @@ then
   curl -X PUT http://$TEST_AGGREGATOR_HOST:$TEST_AGGREGATOR_PORT/api/aggregator/workers/$UUID/stop --fail
 
   echo "Simulation run complete and reported!"
+
 fi

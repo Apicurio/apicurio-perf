@@ -42,7 +42,7 @@ public class TokenRefresh {
         long expiresOn = token.getExpiresOn().getTime();
         long millisUntilExpiration = expiresOn - now;
 
-        System.err.println("Token expires in " + millisUntilExpiration + "ms (" + (millisUntilExpiration/1000) + " seconds) ["+(millisUntilExpiration/1000/60)+" minutes]");
+        //System.err.println("Token expires in " + millisUntilExpiration + "ms (" + (millisUntilExpiration/1000) + " seconds) ["+(millisUntilExpiration/1000/60)+" minutes]");
 
         return millisUntilExpiration <= 0;
     }
