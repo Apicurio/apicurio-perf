@@ -30,18 +30,16 @@ ENV TEST_REPORT_RESULTS false
 ENV TEST_AGGREGATOR_HOST none
 ENV TEST_AGGREGATOR_PORT 80
 
-ENV TEST_RESULTS_GITHUB_REPO apicurio-perf-results
 ENV TEST_RESULTS_GITHUB_USER apicurio-ci
 ENV TEST_RESULTS_GITHUB_EMAIL apicurio.ci@gmail.com
 ENV TEST_RESULTS_GITHUB_PASS not-provided
 
-
 RUN yum install -y epel-release && \
     yum update -y && \
     yum install -y curl wget unzip zip git && \
-    yum install -y java-11-openjdk-devel && \
-    useradd --create-home --shell /bin/bash -p "$(openssl passwd -1 worker)" worker && \
-    mkdir -p /apps && chown worker /apps
+    yum install -y java-11-openjdk-devel
+
+RUN useradd --create-home --shell /bin/bash worker && mkdir -p /apps && chown worker /apps
 
 # Install maven
 RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
@@ -83,6 +81,21 @@ ADD --chown=worker docker-entrypoint.sh /apps/bin/docker-entrypoint.sh
 ADD --chown=worker conf /apps/gatling/conf
 
 RUN chown -R worker /apps && chmod -R 777 /apps
+
+# permissions to the root group, for running this on openshift
+USER root
+RUN chgrp -R 0 /home/worker && \
+    chmod -R g=u /home/worker
+RUN chgrp -R 0 /opt/gatling && \
+  chmod -R g=u /opt/gatling
+RUN chgrp -R 0 /apps/gatling/simulations && \
+    chmod -R g=u /apps/gatling/simulations
+RUN chgrp -R 0 /apps/gatling/conf && \
+    chmod -R g=u /apps/gatling/conf
+RUN echo "{}" >> /.ocm.json
+RUN chgrp -R 0 /.ocm.json && \
+    chmod -R g=u /.ocm.json
+USER worker
 
 # run the test
 ENTRYPOINT ["/apps/bin/docker-entrypoint.sh"]

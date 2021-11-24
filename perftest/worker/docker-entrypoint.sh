@@ -56,6 +56,9 @@ echo "-------------------------------------------------------------------------"
 
 UUID=`cat /proc/sys/kernel/random/uuid`
 
+pwd
+ls
+
 echo "-------------------------------------------------------------------------"
 /apps/bin/ocm login --url=staging --token=$OFFLINE_TOKEN
 /apps/bin/ocm whoami
