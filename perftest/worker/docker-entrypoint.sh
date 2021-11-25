@@ -22,6 +22,7 @@ export TEST_REPORT_RESULTS
 export TEST_AGGREGATOR_HOST
 export TEST_AGGREGATOR_PORT
 
+export TEST_SKIP_PUSH_RESULTS_GITHUB
 export TEST_RESULTS_GITHUB_REPO
 export TEST_RESULTS_GITHUB_USER
 export TEST_RESULTS_GITHUB_EMAIL
@@ -49,6 +50,7 @@ echo "TEST_ITERATIONS: $TEST_ITERATIONS"
 echo "TEST_REPORT_RESULTS: $TEST_REPORT_RESULTS"
 echo "TEST_AGGREGATOR_HOST: $TEST_AGGREGATOR_HOST"
 echo "TEST_AGGREGATOR_PORT: $TEST_AGGREGATOR_PORT"
+echo "TEST_SKIP_PUSH_RESULTS_GITHUB: $TEST_SKIP_PUSH_RESULTS_GITHUB"
 echo "TEST_RESULTS_GITHUB_REPO: $TEST_RESULTS_GITHUB_REPO"
 echo "TEST_RESULTS_GITHUB_USER: $TEST_RESULTS_GITHUB_USER"
 echo "TEST_RESULTS_GITHUB_EMAIL: $TEST_RESULTS_GITHUB_EMAIL"
@@ -85,43 +87,48 @@ echo "Test complete"
 # Push the results to github
 if [[ -z $TEST_RESULTS_GITHUB_REPO ]] ;
 then
-  echo "Skipping pushing results via git"
+  echo "Skipping pushing results via git, missing github repo"
 else
-  echo "Pushing results to $TEST_RESULTS_GITHUB_REPO"
-  mkdir -p /tmp/gitwork
-  cd /tmp/gitwork
-  git init
-  git config --global user.name "$TEST_RESULTS_GITHUB_USER"
-  git config --global user.email "$TEST_RESULTS_GITHUB_EMAIL"
-  git remote add origin "https://$TEST_RESULTS_GITHUB_USER:$TEST_RESULTS_GITHUB_PASS@github.com/Apicurio/$TEST_RESULTS_GITHUB_REPO.git"
-  git fetch
-  git checkout main
-  git branch --set-upstream-to=origin/main
-  git pull
+  if [ "x$TEST_SKIP_PUSH_RESULTS_GITHUB" = "xtrue" ]
+  then
+    echo "Skipping pushing results via git, explicitly set"
+  else
+    echo "Pushing results to $TEST_RESULTS_GITHUB_REPO"
+    mkdir -p /tmp/gitwork
+    cd /tmp/gitwork
+    git init
+    git config --global user.name "$TEST_RESULTS_GITHUB_USER"
+    git config --global user.email "$TEST_RESULTS_GITHUB_EMAIL"
+    git remote add origin "https://$TEST_RESULTS_GITHUB_USER:$TEST_RESULTS_GITHUB_PASS@github.com/Apicurio/$TEST_RESULTS_GITHUB_REPO.git"
+    git fetch
+    git checkout main
+    git branch --set-upstream-to=origin/main
+    git pull
 
-  DATESTAMP=`date +"%Y-%m-%d"`
-  TIMESTAMP=`date -u +"%H.%M.%S"`
-  REPORT_PATH=$DATESTAMP/$TEST_SIMULATION/$TIMESTAMP-${TEST_USERS}u-${TEST_ITERATIONS}i
-  FULL_REPORT_PATH=/tmp/gitwork/$REPORT_PATH
+    DATESTAMP=`date +"%Y-%m-%d"`
+    TIMESTAMP=`date -u +"%H.%M.%S"`
+    REPORT_PATH=$DATESTAMP/$TEST_SIMULATION/$TIMESTAMP-${TEST_USERS}u-${TEST_ITERATIONS}i
+    FULL_REPORT_PATH=/tmp/gitwork/$REPORT_PATH
 
-  mkdir -p /tmp/gitwork/$REPORT_PATH
-  cd /tmp/gitwork/$REPORT_PATH
-  echo "---"
-  pwd
-  echo "---"
+    mkdir -p /tmp/gitwork/$REPORT_PATH
+    cd /tmp/gitwork/$REPORT_PATH
+    echo "---"
+    pwd
+    echo "---"
 
-  # Find and stage the simulation.log file
-  SIMULATION_LOG=`find /apps/gatling/results/ -name 'simulation.log'`
-  RESULTS_DIR=`dirname $SIMULATION_LOG`
-  cp -rf $RESULTS_DIR/* .
+    # Find and stage the simulation.log file
+    SIMULATION_LOG=`find /apps/gatling/results/ -name 'simulation.log'`
+    RESULTS_DIR=`dirname $SIMULATION_LOG`
+    cp -rf $RESULTS_DIR/* .
 
-  git add .
-  git commit -m 'Publishing perf-test results for '"$TEST_SIMULATION"' run.'
-  git push origin main
+    git add .
+    git commit -m 'Publishing perf-test results for '"$TEST_SIMULATION"' run.'
+    git push origin main
 
-  git status
+    git status
 
-  echo "Simulation results published to git!"
+    echo "Simulation results published to git!"
+  fi
 fi
 
 
