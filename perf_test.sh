@@ -3,8 +3,8 @@
 make -C perftest/worker build
 
 export TEST_SIMULATION=End2EndSimulation
-export TEST_USERS=10
+export TEST_USERS=30
 export TEST_ITERATIONS=600
-export TEST_RAMP_TIME=30
+export TEST_RAMP_TIME=45
 
 ./perftest/worker/run.sh
