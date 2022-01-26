@@ -62,7 +62,7 @@ RUN mkdir -p $GATLING_HOME && \
     mkdir -p /apps/bin
 
 # Install ocm
-RUN curl -Lso /apps/bin/ocm https://github.com/openshift-online/ocm-cli/releases/download/v0.1.42/ocm-linux-amd64 && \
+RUN curl -Lso /apps/bin/ocm https://github.com/openshift-online/ocm-cli/releases/download/v0.1.60/ocm-linux-amd64 && \
     chmod +x /apps/bin/ocm
 
 # Setup token-refresh library
