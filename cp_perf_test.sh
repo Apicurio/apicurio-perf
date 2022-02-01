@@ -2,9 +2,9 @@
 
 make -C perftest/worker build
 
-export TEST_SIMULATION=ControlPlaneSimulation
-export TEST_USERS=50
-export TEST_ITERATIONS=300
-export TEST_RAMP_TIME=60
+TEST_SIMULATION="${TEST_SIMULATION:-ControlPlaneSimulation}"
+TEST_USERS="${TEST_USERS:-50}"
+TEST_ITERATIONS="${TEST_ITERATIONS:-300}"
+TEST_RAMP_TIME="${TEST_RAMP_TIME:-60}"
 
 ./perftest/worker/run.sh
