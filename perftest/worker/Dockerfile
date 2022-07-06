@@ -13,7 +13,7 @@ ENV OCM_PATH /apps/bin/ocm
 ENV OCM_URL staging
 ENV OFFLINE_TOKEN not-provided
 
-ENV TOKEN_URL https://identity.api.stage.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
+ENV TOKEN_URL https://sso.redhat.com/auth/redhat-external/rhoas/protocol/openid-connect/token
 ENV ADMIN_CLIENT_ID not-provided
 ENV ADMIN_CLIENT_SECRET not-provided
 

@@ -21,7 +21,7 @@ if [[ -z $FLEET_MANAGER_URL ]] ; then
   export FLEET_MANAGER_URL=https://api.stage.openshift.com/api/serviceregistry_mgmt
 fi
 if [[ -z $TOKEN_URL ]] ; then
-  export TOKEN_URL=https://identity.api.stage.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
+  export TOKEN_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
 fi
 
 
